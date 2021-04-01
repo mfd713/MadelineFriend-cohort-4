@@ -26,41 +26,111 @@ namespace ToDoList
         }
 
         // remove a task
-        static void Remove(string[] arr)
+        static void Remove(string[][] arr)
         {
             //Display list using task
 
-            //Prompt user for item to be deleted, save into variable +1 for index
 
-            int indexToRemove = 0;
-            do
+            //Ask if user is adding a task or subtask
+            int removeTaskorSubtask = PromptUserForInt("Enter 1 to remove a task or 2 to remove a Subtask");
+            switch (removeTaskorSubtask)
             {
-                indexToRemove = PromptUserForInt("Enter list number you wish to remove: ") - 1;
-                if (arr[0] == null)
-                {
-                    Console.WriteLine("This task is empty. You cannot remove what does not exist");
-                    AnyKeyToContinue();
-                    return;
-                }
-                else if (indexToRemove >= arr.Length)
-                {
-                    Console.WriteLine($"Enter a number between 1 and {arr.Length}");
-                }
-            } while (!(indexToRemove < arr.Length));
+                case 1:
+                    //Prompt user for item to be deleted, save into variable +1 for index
+
+                    int indexToRemove = 0;
+                    do
+                    {
+                        indexToRemove = PromptUserForInt("Enter list number for the task you wish to remove: ") - 1;
+                        if (arr[0][0] == null)
+                        {
+                            Console.WriteLine("This task list is empty. You cannot remove what does not exist");
+                            AnyKeyToContinue();
+                            return;
+                        }
+                        else if (indexToRemove >= arr.GetLength(0))
+                        {
+                            Console.WriteLine($"Enter a number between 1 and {arr.GetLength(0)}");
+                        }
+                    } while (!(indexToRemove < arr.GetLength(0)));
+
+                    //delete & move up tasks/set last task to null
+                    for (int i = indexToRemove; i < arr.GetLength(0); i++)
+                    {
+                        if (i == arr.Length - 1)
+                        {
+                            arr[i] = null;
+                        }
+                        else
+                        {
+                            arr[i] = arr[i + 1];
+                        }
+                    }
+                    break;
+                case 2:
+                    //prompt user for which task they want to delete from
+                    //validate that task existing in scope
+                    indexToRemove = 0;
+                    do
+                    {
+                        indexToRemove = PromptUserForInt("Enter the task you want to remove a subtask from: ") - 1;
+                        if (arr[indexToRemove][0] == null)
+                        {
+                            Console.WriteLine("This task is empty. You cannot remove what does not exist");
+                            AnyKeyToContinue();
+                            return;
+                        }
+                        else if (indexToRemove >= arr.GetLength(0))
+                        {
+                            Console.WriteLine($"Enter a number between 1 and {arr.GetLength(0)}");
+                        }
+                    } while (!(indexToRemove < arr.GetLength(0)));
 
 
+                    //display existing subtasks
+                    for(int i = 0; i<arr[indexToRemove].Length; i++)
+                    {
+                        if (!String.IsNullOrEmpty(arr[indexToRemove][i]))
+                        {
+                            Console.WriteLine(arr[indexToRemove][i]);
+                        }
+                    }
+                    //prompt user for which subtask they want to delete & validate
+                    int subtaskToRemove = 0;
+                    {
+                        subtaskToRemove = PromptUserForInt("Enter the number of the subtask you want to remove: ") - 1;
+                        if (arr[indexToRemove][subtaskToRemove] == null)
+                        {
+                            Console.WriteLine("This subtask is empty. You cannot remove what does not exist");
+                            AnyKeyToContinue();
+                            return;
+                        }
+                        else if (subtaskToRemove >= arr.GetLength(1))
+                        {
+                            Console.WriteLine($"Enter a number between 1 and {arr.GetLength(1)}");
+                        }
+                    } while (!(subtaskToRemove < arr.GetLength(1))) ;
 
-            for (int i = indexToRemove; i < arr.Length; i++)
-            {
-                if (i == arr.Length - 1)
-                {
-                    arr[i] = null;
-                }
-                else
-                {
-                    arr[i] = arr[i + 1];
-                }
+                    //delete & move up subtasks/set last subtask to null
+                    for (int i = subtaskToRemove; i < arr.GetLength(1); i++)
+                    {
+                        if (i == arr.GetLength(1) - 1)
+                        {
+                            arr[indexToRemove][subtaskToRemove] = null;
+                        }
+                        else
+                        {
+                            arr[indexToRemove][subtaskToRemove] = arr[indexToRemove][subtaskToRemove + 1];
+                        }
+                    }
+                    break;
             }
+
+
+
+
+
+            
 
 
         }
@@ -144,7 +214,6 @@ namespace ToDoList
                         }
 
                     }
-
                     break;
             }
 
