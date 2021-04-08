@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CapsuleHotel": {
+      "commandName": "Project",
+      "commandLineArgs": "\"Ada\" \"Bill\" \"Carson\""
+    }
+  }
+}
