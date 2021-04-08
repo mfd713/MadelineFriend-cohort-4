@@ -6,14 +6,13 @@ namespace CapsuleHotel
 {
     public class Capsule
     {
-        public Guest guest { get; set; }
+        public Guest Occupant { get; set; }
         public bool isOccupied { get {
-                return isOccupied;
+                return Occupant != null;
             }
-
             private set
             {
-                if(guest == null)
+                if (Occupant == null)
                 {
                     isOccupied = false;
                 }
@@ -23,53 +22,44 @@ namespace CapsuleHotel
                 }
             } }
 
-        //WHEN U COME BACK FROM LUNCH START HERE, REFACTORING CHECKIN METHOD TO WORK WITH NEW SYSTEM
         /// <summary>
-        /// Promps the user for a guest name & capsule number and adds the guest to the list if both entries are valid
+        /// Sets the guest in this capsule if it is not occupied.
         /// </summary>
-        /// <param name="arr">string[] guestList</param>
-        public void CheckIn(Guest g)
+        /// <param name="g">The guest to check in</param>
+        /// <returns>true if checkin was successfull, false if the spot is occupied</returns>
+        public bool CheckIn(Guest g)
         {
-            int capsuleNumber = 0;
-            //confirm at least one open spot
-            if (CountNullOrEmpties(arr) == 0)
+            //Check if capsule is occupied
+            if(isOccupied)
             {
-                Console.WriteLine("The guest list is full. Please remove a guest before adding a new one.");
-                AnyKeyToContinue();
-                return;
-            }
-            //promt user for guest name
-            guestName = ReadString("Enter the guest name");
-            //prompt user for spot number
-            capsuleNumber = ReadInt($"Enter the capsule number (1 - {arr.Length})", 1, arr.Length);
-            //re-prompt if spot is occupied
-            while (IsCapsuleOccupied(arr, capsuleNumber - 1))
-            {
-                capsuleNumber = ReadInt("Oops! That capsule is occupied. Please enter another");
+                Console.WriteLine("Oops! That capsule is occupied. Please enter another");
+                return false;
             }
 
-            //set if spot is open
-            arr[capsuleNumber - 1] = guestName;
-            Console.WriteLine($"Success! {guestName} was added to Capusle # {capsuleNumber}");
-            AnyKeyToContinue();
+            //set if this capsule is open
+            Occupant = g;
+            return true;
         }
 
         /// <summary>
-        /// Counts the number of null/empty strings in an array of strings
+        /// If this capsule is occupied, removes the guest from it and sets the Occupant to null
         /// </summary>
-        /// <param name="arr">array of strings</param>
-        /// <returns>int count of empties</returns>
-        private int CountNullOrEmpties()
+        /// <returns>The Guest that was removed, or null if no Guest to remove</returns>
+        public Guest CheckOut()
         {
-            int count = 0;
-            foreach (string item in arr)
+
+            //validate occupied
+            if (!isOccupied)
             {
-                if (String.IsNullOrEmpty(item))
-                {
-                    count++;
-                }
+                Console.WriteLine("Oops! That capsule isn't occupied. Please enter another");
+                ConsoleIO.AnyKeyToContinue();
+                return null;
             }
-            return count;
+
+            Guest holder = Occupant;
+            Occupant = null;
+            return holder;
+            
         }
     }
 }

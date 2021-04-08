@@ -9,17 +9,22 @@ namespace CapsuleHotel
         {
             //run start menu to get guest array length
             int capacity = 0;
-            Capsule[] Hotel;
+
+            const decimal PER_NIGHT_PRICE = 33.33M;
 
             capacity = ConsoleIO.StartupMenu();
-            Hotel = new Capsule[capacity];
+            Capsule[] Hotel = new Capsule[capacity];
 
+            for (int i = 0; i < capacity; i++)
+            {
+                Hotel[i] = new Capsule();
+            }
 
             string[] fullList = { "Ada", "Bill", "Carson" };
             string[] longList = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve" };
 
-            Console.WriteLine($"Ok! There are {capacity} capsules ready for booking.");
-            AnyKeyToContinue();
+            Console.WriteLine($"Ok! There are {Hotel.Length} capsules ready for booking.");
+            ConsoleIO.AnyKeyToContinue();
 
             //main menu
             do
@@ -38,14 +43,42 @@ namespace CapsuleHotel
                     case -1:
                         break;
                     case 1:
-                        ViewGuestList(guestList);
+                        ConsoleIO.ViewGuestList(Hotel);
                         break;
                     case 2:
-                        CheckIn(guestList);
+                        if (CanCheckIn(Hotel))
+                        {
+                            int capsuleIndex = ConsoleIO.ReadInt($"Which capsule would you like to check a guest into? (1 - {Hotel.Length})", 1, Hotel.Length) -1 ;
+                            if (Hotel[capsuleIndex].isOccupied)
+                            {
+                                Console.WriteLine("That capsule is already occupeid! Taking you back to the menu...");
+                                ConsoleIO.AnyKeyToContinue();
+                                break;
+                            }
+                            Guest aGuest = ConsoleIO.GetGuestInfo();
+                            if (Hotel[capsuleIndex].CheckIn(aGuest))
+                            {
+                                Console.WriteLine($"{aGuest.FirstName} {aGuest.LastName} was successfully checked in");
+                                ConsoleIO.AnyKeyToContinue();
+                            }
+                            else
+                            {
+                                ConsoleIO.PrintErrorMessage();
+                            }
+                        }
                         break;
                     case 3:
-                        CheckOut(guestList);
-                        break;
+                        if (CanCheckOut(Hotel))
+                        {
+                            int capsuleIndex = ConsoleIO.ReadInt($"Which capsule would you like to check a guest out of? (1 - {Hotel.Length})", 1, Hotel.Length) - 1;
+                            Guest aGuest = Hotel[capsuleIndex].CheckOut();
+                            if (aGuest != null)
+                            {
+                                Console.WriteLine($"{aGuest.FirstName} {aGuest.LastName} was successfully checked out. The cost was {aGuest.LengthOfStay*PER_NIGHT_PRICE:C}");
+                                ConsoleIO.AnyKeyToContinue();
+                            }
+                        }
+                            break;
                     case 4:
                         if (CheckExit().Contains("y"))
                         {
@@ -59,17 +92,6 @@ namespace CapsuleHotel
 
             } while (true);//will not exit until user chooses exit option
         }
-        
-
-        //pause the console and allow user to press any key to continue
-        static void AnyKeyToContinue()
-        {
-
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-        }
-
-        
 
         /// <summary>
         /// Confirms that the user really wants to exit, and exits if they do. Otherwise returns to main menu
@@ -92,113 +114,64 @@ namespace CapsuleHotel
             return !(string.IsNullOrEmpty(arr[spot]));
         }
         
+        
+
         /// <summary>
-        /// Prints guest list to the console
+        /// Counts the number of null/empty strings in an array of strings
         /// </summary>
-        /// <param name="arr">string array of guest list</param>
-        static void ViewGuestList(string[] arr)
+        /// <param name="arr">array of strings</param>
+        /// <returns>int count of empties</returns>
+       public static int CountNullOrEmpties(Capsule[] arr)
         {
-            StringBuilder content = new StringBuilder();
-            int centerIndex = 0;
-
-            //prompt user for capsule to center
-            centerIndex = ReadInt($"Please enter the capsule you wish to view (1 - {arr.Length})", 1, arr.Length) - 1;
-
-            //print header showing Capsule # Guest Name
-            Console.WriteLine($"Capsule # : Guest Name");
-
-            //print 11 pairs (or as many on side as possible given the array scope)
-            //add 5 to the left if there are...
-            if (centerIndex - 5 >= 0)
+            int count = 0;
+            foreach (Capsule item in arr)
             {
-                for (int i = centerIndex - 5; i < centerIndex; i++)
+                if (item.isOccupied == false)
                 {
-                    AddToViewList(arr, i, content);
+                    count++;
                 }
             }
-            //add as many as possible to left if there aren't
-            if (centerIndex - 5 < 0)
-            {
-                for (int i = 0; i < centerIndex; i++)
-                {
-                    AddToViewList(arr, i, content);
-                }
-            }
-
-            //add center
-            AddToViewList(arr, centerIndex, content);
-
-            //add 5 to the right if there are...
-            if (arr.Length - 5 - 1 >= centerIndex)
-            {
-                for (int i = centerIndex + 1; i < centerIndex + 6; i++)
-                {
-                    AddToViewList(arr, i, content);
-                }
-            }
-            //add as many as possible to the right if there aren't
-            if (arr.Length - 5 -1< centerIndex)
-            {
-                for (int i = centerIndex + 1; i < arr.Length; i++)
-                {
-                    AddToViewList(arr, i, content);
-                }
-            }
-
-            //print result
-            Console.WriteLine(content.ToString());
-
-            //pause until move on
-            AnyKeyToContinue();
-
+            return count;
         }
 
         /// <summary>
-        /// Removes a guest from a guest list arry
+        /// Checks if there are any open spaces in a Capsule array to add a guest
         /// </summary>
-        /// <param name="arr">string arry containing guest names</param>
-        static void CheckOut(string[] arr)
+        /// <param name="arr">Array of Capsules</param>
+        /// <returns>True if there is at least 1 space to check in, false if not</returns>
+        public static bool CanCheckIn(Capsule[] arr)
         {
-            int capsuleIndex = 0;
+            //confirm at least 1 capsule available
+            if (CountNullOrEmpties(arr) == 0)
+            {
+                Console.WriteLine("The guest list is full. please remove a guest before adding a new one.");
+                ConsoleIO.AnyKeyToContinue();
+                return false;
+            }
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// Checks if there are any guests in a Capsule array
+        /// </summary>
+        /// <param name="arr">Array of Capsules</param>
+        /// <returns>True if there is at least 1 capsule spot containing a guest, false if not</returns>
+        public static bool CanCheckOut(Capsule[] arr)
+        {
             //check there are guests entered
-            if(CountNullOrEmpties(arr) == arr.Length)
+            if (CountNullOrEmpties(arr) == arr.Length)
             {
                 Console.WriteLine("There are no guests to check out! Taking you back to the main menu.");
-                AnyKeyToContinue();
-                return;
+                ConsoleIO.AnyKeyToContinue();
+                return false;
             }
-
-            //prompt user for capsule number to check out
-            capsuleIndex = ReadInt($"Enter the capsule number you want to check out (1 - {arr.Length})", 1, arr.Length) - 1;
-
-            //validate occupied
-            while(!IsCapsuleOccupied(arr, capsuleIndex))
-            {
-                capsuleIndex = ReadInt($"Oops! That capsule isn't occupied. Please enter another number (1 - {arr.Length})", 1, arr.Length) - 1;
-            }
-
-            Console.WriteLine($"OK! {arr[capsuleIndex]} was removed from Capsule #{capsuleIndex + 1}");
-            arr[capsuleIndex] = null;
-            //pause
-            AnyKeyToContinue();
+            return true;
         }
-      
-        /// <summary>
-        /// Given an array, index, and StringBuilder, adds the array item at that index to the StringBuilder. Adds "unoccupied" if the array item is null
-        /// </summary>
-        /// <param name="arr">string array full of guest names</param>
-        /// <param name="i">index you want in the array</param>
-        /// <param name="sBuild">a string builder that you are adding to</param>
-        static void AddToViewList(string[] arr, int i, StringBuilder sBuild)
-        {
-            if (String.IsNullOrEmpty(arr[i]))
-            {
-                sBuild.Append($"\n{i + 1}: [unoccupied]");
-            }
-            else
-            {
-                sBuild.Append($"\n{i + 1}: {arr[i]}");
-            }
-        }
-    }
+        
+        
+//prompt user for capsule number to check out
+//capsuleIndex = ReadInt($"Enter the capsule number you want to check out (1 - {arr.Length})", 1, arr.Length) - 1;
+}
 }
