@@ -3,18 +3,19 @@
     *+PromptUserInt(string message, int min, int max) : int
     *+PromptUser(string message) : string
     *+DisplayBoard(Stone[]) : void
-    *+GetHumanMove() : Stone
+    *+GetHumanMove() : Stone //need to know player color, pass in whatever you need to know that
     *+DisplaySetUpMenu() : void
 GameRunner
     +SetUp(
         -Get player types, human player name(s)
-        -Instantiate GomokuEngine w/ players
+        -Set GomokuEngine w/ players
     )
     +Run(
-        - while(!Result.IsSuccess){
-            -Get & show human moves/generate & show computer moves
+        - while(!G.IsOver){
+            -Get & show human moves/generate & show computer moves (if(player.GenerateMove == null) will be player move,need to get it from them)
                 - only allow valid movess
                 - note: stones are stored in the GomokuEngine object property Stones array
+                - if(game.IsBlacksTurn), Stone.isBlack == true
             -End loop once there is a success
         }
         -Re-start or end program depending on user input

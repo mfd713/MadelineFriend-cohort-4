@@ -1,10 +1,15 @@
-﻿namespace Gomoku
+﻿using System;
+using Gomoku.Game;
+namespace Gomoku
 {
     class Program
     {
         static void Main(string[] args)
         {
-            System.Console.WriteLine("Gomoku!");
+            GameRunner gr = new GameRunner();
+
+            gr.SetUp();
+            gr.Run();
         }
     }
 }
