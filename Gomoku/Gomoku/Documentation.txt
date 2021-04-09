@@ -1,0 +1,21 @@
+﻿ConsolIO
+	*+PromptUserInt(string message) : int
+    *+PromptUserInt(string message, int min, int max) : int
+    *+PromptUser(string message) : string
+    *+DisplayBoard(Stone[]) : void
+    *+GetHumanMove() : Stone
+    *+DisplaySetUpMenu() : void
+GameRunner
+    +SetUp(
+        -Get player types, human player name(s)
+        -Instantiate GomokuEngine w/ players
+    )
+    +Run(
+        - while(!Result.IsSuccess){
+            -Get & show human moves/generate & show computer moves
+                - only allow valid movess
+                - note: stones are stored in the GomokuEngine object property Stones array
+            -End loop once there is a success
+        }
+        -Re-start or end program depending on user input
+    )
