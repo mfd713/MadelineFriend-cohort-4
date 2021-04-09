@@ -23,7 +23,7 @@ namespace CapsuleHotel
             } }
 
         /// <summary>
-        /// Sets the guest in this capsule if it is not occupied.
+        /// Sets the guest in this capsule if it is not occupied. Acts like 'push' to an array
         /// </summary>
         /// <param name="g">The guest to check in</param>
         /// <returns>true if checkin was successfull, false if the spot is occupied</returns>
@@ -42,7 +42,7 @@ namespace CapsuleHotel
         }
 
         /// <summary>
-        /// If this capsule is occupied, removes the guest from it and sets the Occupant to null
+        /// If this capsule is occupied, removes the guest from it and sets the Occupant to null. Acts kind of like 'pop' from an array
         /// </summary>
         /// <returns>The Guest that was removed, or null if no Guest to remove</returns>
         public Guest CheckOut()

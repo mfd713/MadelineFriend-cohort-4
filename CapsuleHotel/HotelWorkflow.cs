@@ -14,6 +14,7 @@ namespace CapsuleHotel
 
             const decimal PER_NIGHT_PRICE = 33.33M;
 
+            //get Hotel size from user and initialize the Hotel as an array of Capsules
             capacity = ConsoleIO.StartupMenu();
             Capsule[] Hotel = new Capsule[capacity];
 
@@ -48,6 +49,7 @@ namespace CapsuleHotel
                     case 2:
                         if (CanCheckIn(Hotel))
                         {
+                            //validate the room is open
                             int capsuleIndex = ConsoleIO.ReadInt($"Which capsule would you like to check a guest into? (1 - {Hotel.Length})", 1, Hotel.Length) - 1;
                             if (Hotel[capsuleIndex].isOccupied)
                             {
@@ -55,6 +57,8 @@ namespace CapsuleHotel
                                 ConsoleIO.AnyKeyToContinue();
                                 break;
                             }
+
+                            //now that we know the space is available, take in guest info and add them
                             Guest aGuest = ConsoleIO.GetGuestInfo();
                             if (Hotel[capsuleIndex].CheckIn(aGuest))
                             {
@@ -71,7 +75,7 @@ namespace CapsuleHotel
                         if (CanCheckOut(Hotel))
                         {
                             int capsuleIndex = ConsoleIO.ReadInt($"Which capsule would you like to check a guest out of? (1 - {Hotel.Length})", 1, Hotel.Length) - 1;
-                            Guest aGuest = Hotel[capsuleIndex].CheckOut();
+                            Guest aGuest = Hotel[capsuleIndex].CheckOut(); //CheckOut method validates if the chosen capsule has a guest that can be removed
                             if (aGuest != null)
                             {
                                 Console.WriteLine($"{aGuest.FirstName} {aGuest.LastName} was successfully checked out. The cost was {aGuest.LengthOfStay * PER_NIGHT_PRICE:C}");
