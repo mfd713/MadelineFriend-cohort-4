@@ -44,6 +44,20 @@ namespace Gomoku.Game
             return players;
         }
 
+        public static void DisplayBoard(GameRunner gr)
+        {
+            
+            for (int i = 0; i < 16; i++)
+            {
+                for (int j = 0; j < 16; j++)
+                {
+                    Console.Write(gr.Board[i,j]);
+                }
+                Console.WriteLine();
+            }
+
+        }
+
         /// <summary>
         /// Get an int from the user
         /// </summary>
