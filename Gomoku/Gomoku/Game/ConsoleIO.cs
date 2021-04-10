@@ -46,6 +46,7 @@ namespace Gomoku.Game
 
         public static void DisplayBoard(GameRunner gr)
         {
+            Console.Clear();
             
             for (int i = 0; i < 16; i++)
             {
@@ -56,6 +57,15 @@ namespace Gomoku.Game
                 Console.WriteLine();
             }
 
+        }
+
+        public static Stone GetHumanMove(GameRunner gr)
+        {
+            Console.WriteLine($"{gr.G.Current.Name}'s Turn");
+            int stoneCol = PromptInt("Enter the column", 1, 15);
+            int stoneRow = PromptInt("Enter the row", 1, 15);
+
+            return new Stone(stoneRow, stoneCol, gr.G.IsBlacksTurn);
         }
 
         /// <summary>

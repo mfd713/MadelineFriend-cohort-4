@@ -49,17 +49,62 @@ namespace Gomoku.Game
             {
                 //display the board
                 ConsoleIO.DisplayBoard(this);
+
+                Stone mostRecent = G.Current.GenerateMove(G.Stones);
                 //If player turn, prompt for moves
-                    //Validate move is legal (//the most recent move (Place(Stone)) didn't result in a success condition (Result.IsSuccess == false))
-                //If random turn, generate the move
-                    //keep running GenerateMove while (!G.Place(Stone).IsSuccess) 
+                if(mostRecent == null)
+                {
+                    Result ofHumanMove;
 
-                //display the board after whomstever moves
+                    do
+                    {
+                        mostRecent = ConsoleIO.GetHumanMove(this);
+                        ofHumanMove = G.Place(mostRecent);//Validate move is legal 
+                    } while (!ofHumanMove.IsSuccess); //the most recent move (Place(Stone)) didn't result in a success condition
+                    //add stone to the board after human moves
+                    switch (mostRecent.IsBlack)
+                    {
+                        case true:
+                            Board[mostRecent.Row, mostRecent.Column] = " X ";
+                            break;
+                        case false:
+                            Board[mostRecent.Row, mostRecent.Column] = " O ";
+                            break;
+                    }
+                }
+                else //If random turn, generate the move
+                {
+                    Result ofRandomMove;
+                    
+                    do
+                    {
+                        ofRandomMove = G.Place(mostRecent);
+                    } while (!ofRandomMove.IsSuccess);
+
+                    //add stone to the board after random move 
+                    switch (mostRecent.IsBlack)
+                    {
+                        case true:
+                            Board[mostRecent.Row+1, mostRecent.Column+1] = " X "; //add 1 to prevent placing in the 0th rows
+                            break;
+                        case false:
+                            Board[mostRecent.Row+1, mostRecent.Column+1] = " O ";
+                            break;
+                    }
+                }
+                
+
+                //keep running GenerateMove while (!G.Place(Stone).IsSuccess) 
+
+                
+
                 //check if there is a win
-                    //break if yes
+                //break if yes
+                ConsoleIO.DisplayBoard(this);
 
+            } while (!G.IsOver); //while the game is not over!G.IsOver
+            Console.WriteLine($"{G.Winner.Name} has won!");
 
-            } while (false); //while the game is not over!G.IsOver
         }
     }
 }

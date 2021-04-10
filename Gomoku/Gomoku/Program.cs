@@ -7,9 +7,15 @@ namespace Gomoku
         static void Main(string[] args)
         {
             GameRunner gr = new GameRunner();
+            string playAgain;
 
-            gr.SetUp();
-            gr.Run();
+            do
+            {
+                gr.SetUp();
+                gr.Run();
+                playAgain = ConsoleIO.PromptString("Do you want to play again? [y/n]");
+            } while (playAgain == "y");
+
         }
     }
 }

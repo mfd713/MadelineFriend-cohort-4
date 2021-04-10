@@ -3,7 +3,7 @@
     *+PromptUserInt(string message, int min, int max) : int
     *+PromptUser(string message) : string
     *+DisplayBoard(Stone[]) : void
-    *+GetHumanMove() : Stone //need to know player color, pass in whatever you need to know that
+    *+GetHumanMove(Gamerunner) : Stone //need to know player color, pass in whatever you need to know that
     *+DisplaySetUpMenu() : void
 GameRunner
     +SetUp(
