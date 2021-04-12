@@ -75,12 +75,14 @@ namespace CapsuleHotel
                         if (CanCheckOut(Hotel))
                         {
                             int capsuleIndex = ConsoleIO.ReadInt($"Which capsule would you like to check a guest out of? (1 - {Hotel.Length})", 1, Hotel.Length) - 1;
-                            Guest aGuest = Hotel[capsuleIndex].CheckOut(); //CheckOut method validates if the chosen capsule has a guest that can be removed
-                            if (aGuest != null)
+                            Guest aGuest;
+
+                            do
                             {
-                                Console.WriteLine($"{aGuest.FirstName} {aGuest.LastName} was successfully checked out. The cost was {aGuest.LengthOfStay * PER_NIGHT_PRICE:C}");
-                                ConsoleIO.AnyKeyToContinue();
-                            }
+                                aGuest = Hotel[capsuleIndex].CheckOut(); //CheckOut method validates if the chosen capsule has a guest that can be removed
+                            } while (aGuest == null);
+
+                            ConsoleIO.AnyKeyToContinue();
                         }
                         break;
                     case 4:

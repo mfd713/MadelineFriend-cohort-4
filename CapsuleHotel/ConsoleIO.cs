@@ -19,15 +19,39 @@ namespace CapsuleHotel
         public static Guest GetGuestInfo()
         {
             string first, last;
-            int days;
+            DateTime time;
 
             first = ReadString("Guest first name");
             last = ReadString("Guest last name");
-            days = ReadInt("Length of stay (1 - 14 days)", 1, 14);
-
-            return new Guest(first, last, days);
+            time = DateTime.Now;
+            return new Guest(first, last, time);
         }
 
+        /// <summary>
+        /// Prompts the user to enter a checkout day
+        /// </summary>
+        /// <returns>DateTime value of their checkout day/time</returns>
+        public static DateTime GetCheckoutDay()
+        {
+            string input = ReadString("What day are you checking out?");
+            return DateTime.Parse(input);
+        }
+
+        /// <summary>
+        /// Displays the total cost of a stay in the capsule hotel
+        /// </summary>
+        /// <param name="checkin">DateTime that a guest was checked in</param>
+        /// <param name="checkout">DateTime that a guest is checking out</param>
+        /// <param name="cost">Cost per night of a capsule</param>
+        public static void PrintTotalCost(Guest guest, DateTime checkout, decimal cost)
+        {
+            TimeSpan length = checkout.Subtract(guest.CheckInTime);
+            //Stay must be at least one day, partial days are rounded up to whole number
+            int days = Math.Max(1, (int)Math.Ceiling(length.TotalDays));
+
+            Console.WriteLine($"Ok! {guest.FirstName} {guest.LastName} was checked out." +
+                $" The total cost for {days} day(s) is {days*cost}");
+        }
         /// <summary>
         /// Prints guest list to the console
         /// </summary>

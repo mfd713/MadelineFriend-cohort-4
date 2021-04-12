@@ -56,10 +56,18 @@ namespace CapsuleHotel
                 return null;
             }
 
+            DateTime checkout = ConsoleIO.GetCheckoutDay();
+            while (Occupant.CheckInTime.Day > checkout.Day || checkout.Day<0)
+            {
+                Console.WriteLine("Slow down there, Time Traveler. Please try again");
+                checkout = ConsoleIO.GetCheckoutDay();
+            }
+
             Guest holder = Occupant;
             Occupant = null;
-            return holder;
-            
+
+            ConsoleIO.PrintTotalCost(holder, checkout, 33.33M);
+            return holder; 
         }
     }
 }

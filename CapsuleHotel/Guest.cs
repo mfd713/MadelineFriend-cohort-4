@@ -8,13 +8,13 @@ namespace CapsuleHotel
     {
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
-        public int LengthOfStay { get; private set; }
+        public DateTime CheckInTime { get; private set; }
 
-        public Guest(string first, string last, int days)
+        public Guest(string first, string last, DateTime time)
         {
             FirstName = first;
             LastName = last;
-            LengthOfStay = days;
+            CheckInTime = time;
         }
     }
 
