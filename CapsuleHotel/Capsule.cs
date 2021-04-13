@@ -7,20 +7,22 @@ namespace CapsuleHotel
     public class Capsule
     {
         public Guest Occupant { get; set; }
-        public bool isOccupied { get {
+        public bool IsOccupied { get {
                 return Occupant != null;
             }
             private set
             {
                 if (Occupant == null)
                 {
-                    isOccupied = false;
+                    IsOccupied = false;
                 }
                 else
                 {
-                    isOccupied = true;
+                    IsOccupied = true;
                 }
             } }
+
+        public const decimal PER_NIGHT_PRICE = 33.33M;
 
         /// <summary>
         /// Sets the guest in this capsule if it is not occupied. Acts like 'push' to an array
@@ -29,13 +31,6 @@ namespace CapsuleHotel
         /// <returns>true if checkin was successfull, false if the spot is occupied</returns>
         public bool CheckIn(Guest g)
         {
-            //Check if capsule is occupied
-            if(isOccupied)
-            {
-                Console.WriteLine("Oops! That capsule is occupied. Please enter another");
-                return false;
-            }
-
             //set if this capsule is open
             Occupant = g;
             return true;
@@ -49,7 +44,7 @@ namespace CapsuleHotel
         {
 
             //validate occupied
-            if (!isOccupied)
+            if (!IsOccupied)
             {
                 Console.WriteLine("Oops! That capsule isn't occupied. Please enter another");
                 ConsoleIO.AnyKeyToContinue();
@@ -66,7 +61,7 @@ namespace CapsuleHotel
             Guest holder = Occupant;
             Occupant = null;
 
-            ConsoleIO.PrintTotalCost(holder, checkout, 33.33M);
+            ConsoleIO.PrintTotalCost(holder, checkout, PER_NIGHT_PRICE);
             return holder; 
         }
     }

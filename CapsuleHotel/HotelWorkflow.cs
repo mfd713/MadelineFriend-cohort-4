@@ -9,23 +9,11 @@ namespace CapsuleHotel
 
         public void Run()
         {
-            //run start menu to get guest array length
-            int capacity = 0;
+            //instantiate hotel
+            List<Capsule> Hotel = new List<Capsule>();
+            //greet w/ startup menu
+            ConsoleIO.StartupMenu();
 
-            const decimal PER_NIGHT_PRICE = 33.33M;
-
-            //get Hotel size from user and initialize the Hotel as an array of Capsules
-            capacity = ConsoleIO.StartupMenu();
-            Capsule[] Hotel = new Capsule[capacity];
-
-            for (int i = 0; i < capacity; i++)
-            {
-                Hotel[i] = new Capsule();
-            }
-
-
-            Console.WriteLine($"Ok! There are {Hotel.Length} capsules ready for booking.");
-            ConsoleIO.AnyKeyToContinue();
 
             //main menu
             do
@@ -47,40 +35,30 @@ namespace CapsuleHotel
                         ConsoleIO.ViewGuestList(Hotel);
                         break;
                     case 2:
-                        if (CanCheckIn(Hotel))
+                        //This hotel has infinite space! Create a new capsule, take in guest info, and slap them on the end of the List
+                        Hotel.Add(new Capsule());
+                        Guest aGuest = ConsoleIO.GetGuestInfo();
+                        if (Hotel[Hotel.Count-1].CheckIn(aGuest))
                         {
-                            //validate the room is open
-                            int capsuleIndex = ConsoleIO.ReadInt($"Which capsule would you like to check a guest into? (1 - {Hotel.Length})", 1, Hotel.Length) - 1;
-                            if (Hotel[capsuleIndex].isOccupied)
-                            {
-                                Console.WriteLine("That capsule is already occupeid! Taking you back to the menu...");
-                                ConsoleIO.AnyKeyToContinue();
-                                break;
-                            }
-
-                            //now that we know the space is available, take in guest info and add them
-                            Guest aGuest = ConsoleIO.GetGuestInfo();
-                            if (Hotel[capsuleIndex].CheckIn(aGuest))
-                            {
-                                Console.WriteLine($"{aGuest.FirstName} {aGuest.LastName} was successfully checked in");
-                                ConsoleIO.AnyKeyToContinue();
-                            }
-                            else
-                            {
-                                ConsoleIO.PrintErrorMessage();
-                            }
+                            Console.WriteLine($"{aGuest.FirstName} {aGuest.LastName} was successfully checked in");
+                            ConsoleIO.AnyKeyToContinue();
                         }
+                        else
+                        {
+                            ConsoleIO.PrintErrorMessage();
+                        }               
                         break;
                     case 3:
                         if (CanCheckOut(Hotel))
                         {
-                            int capsuleIndex = ConsoleIO.ReadInt($"Which capsule would you like to check a guest out of? (1 - {Hotel.Length})", 1, Hotel.Length) - 1;
-                            Guest aGuest;
+                            int capsuleIndex = ConsoleIO.ReadInt($"Which capsule would you like to check a guest out of? (1 - {Hotel.Count})", 1, Hotel.Count) - 1;
+                            Capsule toRemove = Hotel[capsuleIndex];
 
                             do
                             {
-                                aGuest = Hotel[capsuleIndex].CheckOut(); //CheckOut method validates if the chosen capsule has a guest that can be removed
+                                aGuest = toRemove.CheckOut();
                             } while (aGuest == null);
+                            Hotel.RemoveAt(capsuleIndex);
 
                             ConsoleIO.AnyKeyToContinue();
                         }
@@ -120,7 +98,7 @@ namespace CapsuleHotel
             int count = 0;
             foreach (Capsule item in arr)
             {
-                if (item.isOccupied == false)
+                if (item.IsOccupied == false)
                 {
                     count++;
                 }
@@ -128,34 +106,16 @@ namespace CapsuleHotel
             return count;
         }
 
-        /// <summary>
-        /// Checks if there are any open spaces in a Capsule array to add a guest
-        /// </summary>
-        /// <param name="arr">Array of Capsules</param>
-        /// <returns>True if there is at least 1 space to check in, false if not</returns>
-        public static bool CanCheckIn(Capsule[] arr)
-        {
-            //confirm at least 1 capsule available
-            if (CountNullOrEmpties(arr) == 0)
-            {
-                Console.WriteLine("The guest list is full. please remove a guest before adding a new one.");
-                ConsoleIO.AnyKeyToContinue();
-                return false;
-            }
-
-            return true;
-        }
-
 
         /// <summary>
         /// Checks if there are any guests in a Capsule array
         /// </summary>
-        /// <param name="arr">Array of Capsules</param>
+        /// <param name="hotel">Array of Capsules</param>
         /// <returns>True if there is at least 1 capsule spot containing a guest, false if not</returns>
-        public static bool CanCheckOut(Capsule[] arr)
+        public static bool CanCheckOut(List<Capsule> hotel)
         {
             //check there are guests entered
-            if (CountNullOrEmpties(arr) == arr.Length)
+            if (hotel.Count==0)
             {
                 Console.WriteLine("There are no guests to check out! Taking you back to the main menu.");
                 ConsoleIO.AnyKeyToContinue();
