@@ -16,6 +16,10 @@ namespace CapsuleHotel
             return ReadInt("Enter the number of capsules available");
         }
 
+        /// <summary>
+        /// Prompts the user for guest data
+        /// </summary>
+        /// <returns>a Guest with the properties set by the user's input</returns>
         public static Guest GetGuestInfo()
         {
             string first, last;
