@@ -12,8 +12,7 @@
     +Name : string
     +Int : price
 +IEncounter
-    -_rand : Random
-    +AppearChance : int
+    +GenerateAppearChance(Random) : int
 +Traveler : IEncounter
     -_rand : Random
     +AppearChance : int
@@ -25,12 +24,13 @@
     +RobAmount : int
 +Treasure : IEncounter
     -_rand : Random
-    +AppearChance : decimal
+    +AppearChance : int
     +Contents : Item
 +Cart
     _limit : int
     +Inventory : Dictonary<Item,quantity>
     +ProtectionLvl : int
+    +IsFull : bool
 +GameRunner
     +Protag : Shopkeeper
     +Customer : Traveler
