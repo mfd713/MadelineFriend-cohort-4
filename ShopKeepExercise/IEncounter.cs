@@ -6,7 +6,7 @@ namespace ShopKeepExercise
 {
     public interface IEncounter
     {
-        public void GenerateActionChance();
+        public void InteractWithShopkeep(Shopkeeper protag);
 
     }
 }

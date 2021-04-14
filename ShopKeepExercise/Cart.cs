@@ -21,5 +21,27 @@ namespace ShopKeepExercise
                     IsFull = false;
                 }
             } }
+
+        public void RemoveInventoryItem(Dictionary<Item, int> inventory, Item toRemove)
+        {
+            if(inventory[toRemove] != 0)
+            {
+                inventory[toRemove]--;
+                if (inventory[toRemove] == 0)
+                {
+                    inventory.Remove(toRemove);
+                    Console.WriteLine($"No more {toRemove.Name} in your inventory");
+                }
+                else
+                {
+                    Console.WriteLine($"You now have {inventory[toRemove]} {toRemove.Name} in your inventory");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Item not found");
+            }
+            
+        }
     }
 }
