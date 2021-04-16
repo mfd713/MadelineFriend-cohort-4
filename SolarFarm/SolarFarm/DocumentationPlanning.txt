@@ -1,0 +1,76 @@
+﻿SolarPanelManager
+    Program.cs
+        *+Main(string[] args) : void
+SolarPanelManager.Core
+    SolarPanel
+        +Section {get;set;} : string
+        +Row {get;set;} : int
+        +Column {get;set} : int
+        +DateInstalled {get;set} : DateTime
+        +Material {get;set} : MaterialType
+        +IsTracking {get;set} : Bool
+    MaterialType
+        +MaterialType : Enum
+    Result
+        +Message :string
+        +Success : bool
+    SolarPanelResult : Result
+        +Data : SolarPanel
+    ListOfPanelsResult : Result
+        +Data : Dictionary<string, SolarPanel>
+    ISolarPanelRepository
+        +Create(SolarPanel panel) : SolarPanel
+        +ReadAll() : Dictionary<string, SolarPanel>
+        +Update(string section, SolarPanel panel) : void
+        +Delete(string section) : void   
+SolarPanelManager.DAL
+    FileSolarPanelRepository : ISolarPanelRepository
+        -_panelList : Dictionary<string, SolarPanel> 
+            //Concatinated Section + Row + Column as key
+        -_fileName
+        -LoadPanels() : void
+        -SavePanels() : void
+        +Create(SolarPanel panel) : SolarPanel
+        +ReadAll() : Dictionary<string, SolarPanel>
+        +Update(string section, SolarPanel panel) : void
+        +Delete(string section) : void
+SolarPanelManager.BLL
+    SolarPanelService
+        - repo : ISolarPanelRepository
+        - IsValidPanel(SolarPanel) : SolarPanelResult
+        SolarPanelService(ISolarPanelRepository repository)
+        +Create(SolarPanel panel) : SolarPanelResult
+            //Section can't be empty
+            // 0 < Row <= 250
+            // 0 < Column <= 250
+            //DateInstalled must be past
+            //IsTracking can't be empty
+            //Section + Row + Column must be unique
+        +ReadBySection(string section) : ListOfPanelsResult
+            //check section exists
+            //return false&null if no records for that section found
+        +ReadSinglePanel(string section, int row, int column) : SolarPanelResult
+        +Update(string section, SolarPanel panel) : SolarPanelResult
+            //view panel first, so ReadBySection will catch if the panel doesn't exist
+            //For now, only allow editing Date, Material, IsTracking
+            //Check that target section+row+column isn't already occupied (stretch)
+        +Delete(string section) : SolarPanelResult
+            //also pass through for same reason as Update
+SolarPanelManager.UI
+    ConsoleIO
+        +*Display(string message) : void
+        +*PromptString(string message) : string
+        +*PromptUserInt(string message, int min, int max) : int
+        +*PromptUserDateTime(string message) : DateTime
+        +*PromptUserEnum(string message) : Enum
+        +*PrintPanel(SolarPanel panel) : void
+    SolarPanelController
+        -_service : SolarPanelService
+        
+        +SolarPanelController(SolarPanelService)
+        +Run() : void
+        -Create() : void
+        -ReadBySection() : void
+        -ReadSinglePanel : void
+        -Update() : void
+        -Delete() : void
