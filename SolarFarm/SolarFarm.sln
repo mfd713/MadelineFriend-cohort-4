@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarFarm", "SolarFarm\SolarFarm.csproj", "{1152ABF7-375F-4E99-A429-B4B4997716BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarFarm.Test", "SolarFarm.Test\SolarFarm.Test.csproj", "{46A7B1AA-EACE-49E3-92F9-5D83319288FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1152ABF7-375F-4E99-A429-B4B4997716BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1152ABF7-375F-4E99-A429-B4B4997716BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1152ABF7-375F-4E99-A429-B4B4997716BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46A7B1AA-EACE-49E3-92F9-5D83319288FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46A7B1AA-EACE-49E3-92F9-5D83319288FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46A7B1AA-EACE-49E3-92F9-5D83319288FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46A7B1AA-EACE-49E3-92F9-5D83319288FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

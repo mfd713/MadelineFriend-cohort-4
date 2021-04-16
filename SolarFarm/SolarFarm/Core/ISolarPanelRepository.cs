@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolarFarm.Core
 {
-    interface ISolarPanelRepository
+    public interface ISolarPanelRepository
     {
         //create
         public SolarPanel Create(SolarPanel panel);
