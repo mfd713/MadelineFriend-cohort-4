@@ -40,20 +40,42 @@ namespace SolarFarm.DAL
                         panel.Column = int.Parse(fields[2]);
                         panel.Material = Enum.Parse<MaterialType>(fields[3]);
                         panel.IsTracking = bool.Parse(fields[4]);
-                        string key = $"{panel.Section}-{panel.Row}-{panel.Column}";
-                        _panelList.Add(key, panel);
+                        _panelList.Add(GenerateKey(panel), panel);
                     }
                 }
             }
         }
-        public SolarPanel Create(SolarPanel panel)
+
+        private void SavePanels()
         {
-            return new SolarPanel();
+            if (File.Exists(_fileName))
+            {
+                using(StreamWriter sw = new StreamWriter(_fileName))
+                {
+                    foreach (var panel in _panelList) 
+                    {
+                        sw.WriteLine($"{panel.Value.Section},{panel.Value.Row},{panel.Value.Column}," +
+                            $"{panel.Value.Material},{panel.Value.IsTracking}");
+                    }
+                }
+            }
         }
 
-        public void Delete(string section)
+        private string GenerateKey(SolarPanel panel)
         {
-            throw new NotImplementedException();
+            return $"{panel.Section}-{panel.Row}-{panel.Column}";
+        }
+        public SolarPanel Create(SolarPanel panel)
+        {
+            _panelList.Add($"{panel.Section}-{panel.Row}-{panel.Column}", panel);
+            SavePanels();
+            return panel;
+        }
+
+        public void Delete(SolarPanel panel)
+        {
+            _panelList.Remove(GenerateKey(panel));
+            SavePanels();
         }
 
         public Dictionary<string, SolarPanel> ReadAll()
@@ -63,7 +85,9 @@ namespace SolarFarm.DAL
 
         public void Update(string section, SolarPanel panel)
         {
-            throw new NotImplementedException();
+            _panelList[section].Material = panel.Material;
+            _panelList[section].IsTracking = panel.IsTracking;
+
         }
     }
 }

@@ -15,6 +15,6 @@ namespace SolarFarm.Core
         //update
         public void Update(string section, SolarPanel panel);
         //delete
-        public void Delete(string section);
+        public void Delete(SolarPanel panel);
     }
 }

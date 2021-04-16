@@ -13,5 +13,15 @@ namespace SolarFarm.Core
         public int Column { get; set; }
         public MaterialType Material { get; set; }
         public bool IsTracking { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is SolarPanel panel &&
+                   Section == panel.Section &&
+                   Row == panel.Row &&
+                   Column == panel.Column &&
+                   Material == panel.Material &&
+                   IsTracking == panel.IsTracking;
+        }
     }
 }

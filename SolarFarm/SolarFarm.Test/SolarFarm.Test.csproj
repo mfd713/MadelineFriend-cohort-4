@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="bin\Debug\net5.0\TestData.csv" />
+    <None Include="bin\Debug\net5.0\TestDataConstructor.csv" />
+    <None Include="bin\Debug\net5.0\TestDataDeleteAfter.csv" />
   </ItemGroup>
 
   <ItemGroup>
