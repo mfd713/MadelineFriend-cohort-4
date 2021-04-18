@@ -1,4 +1,9 @@
 ﻿using System;
+using SolarFarm.UI;
+using SolarFarm.BLL;
+using SolarFarm.Core;
+using SolarFarm.DAL;
+
 
 namespace SolarFarm
 {
@@ -6,7 +11,11 @@ namespace SolarFarm
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            ISolarPanelRepository repo = new FileSolarPanelRepository("FullTestData.csv");
+            SolarPanelService service = new SolarPanelService(repo);
+            SolarPanelController solarPanelController = new SolarPanelController(service);
+
+            solarPanelController.Run();
         }
     }
 }

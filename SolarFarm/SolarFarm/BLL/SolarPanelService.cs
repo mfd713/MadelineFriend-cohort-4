@@ -60,7 +60,7 @@ namespace SolarFarm.BLL
                 return new SolarPanelResult { Success = false, Message = "Section key must be uniuqe", Data = panel };
             }
 
-            return new SolarPanelResult { Success = true, Message = "Success", Data = panel };
+            return new SolarPanelResult { Success = true, Message = "Success.", Data = panel };
         }
 
 
@@ -78,6 +78,7 @@ namespace SolarFarm.BLL
             }
 
             _repo.Create(panel);
+            result.Message += $" {panel.GetKey()} added.";
             return result;
         }
 

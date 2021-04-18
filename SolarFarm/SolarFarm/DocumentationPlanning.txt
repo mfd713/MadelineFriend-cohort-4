@@ -60,9 +60,9 @@ SolarPanelManager.UI
     ConsoleIO
         +*Display(string message) : void
         +*PromptString(string message) : string
-        +*PromptUserInt(string message, int min, int max) : int
-        +*PromptUserDateTime(string message) : DateTime
-        +*PromptUserEnum(string message) : Enum
+        +*PromptInt(string message, int min, int max) : int
+        +*PromptDateTime(string message) : DateTime
+        +*PromptMaterialType(string message) : Enum (Material Type)
         +*PrintPanel(SolarPanel panel) : void
     SolarPanelController
         -_service : SolarPanelService
@@ -70,7 +70,8 @@ SolarPanelManager.UI
         +SolarPanelController(SolarPanelService)
         +Run() : void
         -Create() : void
-        -ReadBySection() : void
+        -ReadBySection(string section) : void
         -ReadSinglePanel : void
         -Update() : void
         -Delete() : void
+        -ShouldLeave() : bool
