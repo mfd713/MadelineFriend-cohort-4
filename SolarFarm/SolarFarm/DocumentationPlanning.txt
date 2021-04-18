@@ -50,8 +50,8 @@ SolarPanelManager.BLL
             //check section exists
             //return false&null if no records for that section found
         +ReadSinglePanel(string section, int row, int column) : SolarPanelResult
-        +Update(string section, SolarPanel panel) : SolarPanelResult
-            //view panel first, so ReadBySection will catch if the panel doesn't exist
+        +Update(SolarPanel panel) : SolarPanelResult
+            //view panel first, so ReadBySection/ReadSinglePanel will catch if the panel doesn't exist
             //For now, only allow editing Date, Material, IsTracking
             //Check that target section+row+column isn't already occupied (stretch)
         +Delete(string section) : SolarPanelResult

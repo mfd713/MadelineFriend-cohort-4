@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="bin\Debug\net5.0\TestDataConstructor.csv" />
+    <None Include="bin\Debug\net5.0\TestDataBLLRead.csv" />
+    <None Include="bin\Debug\net5.0\TestDataUpdate.csv" />
     <None Include="bin\Debug\net5.0\TestDataDeleteAfter.csv" />
+    <None Include="bin\Debug\net5.0\TestDataBLLBadCreate.csv" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +21,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SolarFarm\SolarFarm.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\Debug\net5.0\zh-Hant\" />
   </ItemGroup>
 
 </Project>

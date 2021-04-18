@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolarFarm.Core
 {
-    public class ListOffPanelsResult : Result
+    public class ListOfPanelsResult : Result
     {
         public Dictionary<string,SolarPanel> Data { get; set; }
     }

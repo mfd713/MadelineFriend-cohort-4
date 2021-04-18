@@ -7,7 +7,7 @@ using System;
 
 namespace SolarFarm.Test
 {
-    public class Tests
+    public class DALTests
     {
         [SetUp]
         public void Setup()
@@ -28,6 +28,7 @@ namespace SolarFarm.Test
             Assert.IsNotNull(panelList);
             Assert.IsNotNull(panelList["Main-1-1"]);
             Assert.AreEqual(1, panelList.Count);
+            Assert.AreEqual(DateTime.Parse("01/01/2020"), panelList["Main-1-1"].DateInstalled);
             Assert.AreEqual(MaterialType.MulticrystallineSilicon, panelList["Main-1-1"].Material);
             Assert.IsTrue(panelList["Main-1-1"].IsTracking);
 
@@ -38,15 +39,17 @@ namespace SolarFarm.Test
         public void CreateSholdCreateAddPanelToDictionaryAndSave()
         {
             //arrange
+            DateTime date = DateTime.Parse("02/02/2019");
             SolarPanel panel = new SolarPanel
             {
                 Section = "TestSection",
                 Row = 8,
                 Column = 8,
+                DateInstalled = date,
                 Material = MaterialType.AmorphousSilicon,
                 IsTracking = false
             };
-            string testFileName = $"Test{DateTime.Now.Ticks.ToString()}.csv";
+            string testFileName = $"Test{DateTime.Now.Ticks}.csv";
             FileSolarPanelRepository repo = new FileSolarPanelRepository(testFileName);
 
             //act
@@ -57,6 +60,7 @@ namespace SolarFarm.Test
             Assert.IsNotNull(panelList);
             Assert.IsNotNull(panelList["TestSection-8-8"]);
             Assert.AreEqual(1, panelList.Count);
+            Assert.AreEqual(DateTime.Parse("02/02/2019"), panelList["TestSection-8-8"].DateInstalled);
             Assert.AreEqual(MaterialType.AmorphousSilicon, panelList["TestSection-8-8"].Material);
             Assert.IsFalse(panelList["TestSection-8-8"].IsTracking);
             File.Delete(testFileName);
@@ -78,6 +82,7 @@ namespace SolarFarm.Test
                 Section = "DeleterTest",
                 Row = 2,
                 Column = 3,
+                DateInstalled = DateTime.Parse("03/03/2020"),
                 Material = MaterialType.CadmiumTelluride,
                 IsTracking = true
             };
@@ -100,7 +105,7 @@ namespace SolarFarm.Test
         public void UpdateShouldUpdateToEnteredPanel()
         {
             //arrange
-            string testFile = "TestDataConstructor.csv";
+            string testFile = "TestDataUpdate.csv";
             ISolarPanelRepository repo = new FileSolarPanelRepository(testFile);
 
             SolarPanel panel = new SolarPanel
@@ -108,6 +113,7 @@ namespace SolarFarm.Test
                 Section = "Main",
                 Row = 1,
                 Column = 1,
+                DateInstalled = DateTime.Parse("02/06/2018"),
                 Material = MaterialType.CopperIndiumGalliumSelenide,
                 IsTracking = false
             };
