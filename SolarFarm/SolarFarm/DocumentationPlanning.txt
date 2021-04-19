@@ -70,7 +70,7 @@ SolarPanelManager.UI
         +SolarPanelController(SolarPanelService)
         +Run() : void
         -Create() : void
-        -ReadBySection(string section) : void
+        -ReadBySection() : void
         -ReadSinglePanel : void
         -Update() : void
         -Delete() : void

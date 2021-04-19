@@ -67,7 +67,7 @@ namespace SolarFarm.Test
 
             //assert
             Assert.IsTrue(result.Success);
-            Assert.AreEqual("Success", result.Message);
+            Assert.AreEqual("Success. TestSection-8-8 added.", result.Message);
             Assert.AreEqual(panel, result.Data);
             File.Delete(testFileName);
         }
@@ -198,7 +198,7 @@ namespace SolarFarm.Test
 
             //assert
             Assert.IsTrue(result.Success);
-            Assert.AreEqual("Success", result.Message);
+            Assert.AreEqual("Success.", result.Message);
             Assert.AreEqual(upatePanel, result.Data);
             Assert.AreEqual(1, repo.ReadAll().Count);
             File.Delete(testFileName);
@@ -268,7 +268,7 @@ namespace SolarFarm.Test
 
             //assert
             Assert.IsTrue(result.Success);
-            Assert.AreEqual("Panel deleted", result.Message);
+            Assert.AreEqual($"{toDeletePanel.GetKey()} removed.", result.Message);
             Assert.AreEqual(toDeletePanel, result.Data);
         }
     }

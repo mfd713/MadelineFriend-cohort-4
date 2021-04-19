@@ -115,7 +115,7 @@ namespace SolarFarm.UI
                     return MaterialType.CopperIndiumGalliumSelenide;
             }
         }
-        
+
         /// <summary>
         /// Prompts user for whether the panel is tracking the sun, and translates to a boolean
         /// </summary>
@@ -124,12 +124,29 @@ namespace SolarFarm.UI
         public static bool PromptIsTracking(string message)
         {
             string input;
+            bool isValid = false;
             do
             {
                 input = PromptString(message);
-            } while (input != "y" || input != "n");
-            
-            if(input == "y")
+                if (input != "y")
+                {
+                    if (input != "n")
+                    {
+                        isValid = false;
+                    }
+                    else
+                    {
+                        isValid = true;
+                    }
+                }
+                else
+                {
+                    isValid = true;
+                }
+
+            } while (!isValid);
+
+            if (input == "y")
             {
                 return true;
             }
@@ -146,7 +163,7 @@ namespace SolarFarm.UI
         public static void PrintPanel(SolarPanel panel)
         {
             string trackingTranslation;
-            if(panel.IsTracking == true)
+            if (panel.IsTracking == true)
             {
                 trackingTranslation = "yes";
             }
@@ -186,6 +203,58 @@ namespace SolarFarm.UI
         {
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
+        }
+
+        public static MaterialType PromptMaterialUpdate(SolarPanel original)
+        {
+            ConsoleIO.Display($"Material: {original.Material}");
+            ConsoleKeyInfo key = Console.ReadKey();
+            if (key.Key == ConsoleKey.Enter)
+            {
+                return original.Material;
+            }
+            else
+            {
+                return ConsoleIO.PromptMaterialType("\nNew Material: \n1. Multicrystalline Silicon\n2. Monocrystalline Silicon" +
+             "\n3. Amorphous Silicon\n4. Cadmium Telluride\n5. Copper Indium Gallium Selenide");
+            }
+        }
+
+        public static DateTime PromptDateTimeUpdate(SolarPanel original)
+        {
+            ConsoleIO.Display($"Installation Date: {original.DateInstalled}");
+            ConsoleKeyInfo key = Console.ReadKey();
+            if (key.Key == ConsoleKey.Enter)
+            {
+                return original.DateInstalled;
+            }
+            else
+            {
+                return ConsoleIO.PromptDateTime("\nNew installed date");
+            }
+        }
+
+        public static bool PromptTrackingUpdate(SolarPanel original)
+        {
+            string trackingTranslation;
+            if (original.IsTracking == true)
+            {
+                trackingTranslation = "yes";
+            }
+            else
+            {
+                trackingTranslation = "no";
+            }
+            ConsoleIO.Display($"Tracked: {trackingTranslation}");
+            ConsoleKeyInfo key = Console.ReadKey();
+            if (key.Key == ConsoleKey.Enter)
+            {
+                return original.IsTracking;
+            }
+            else
+            {
+                return ConsoleIO.PromptIsTracking("\nNew tracking [y/n]");
+            }
         }
     }
 }

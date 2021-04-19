@@ -125,7 +125,7 @@ namespace SolarFarm.BLL
                 return new SolarPanelResult { Data = null, Success = false, Message = "Panel not found" };
             }
 
-            return new SolarPanelResult { Data = panelsList[$"{section}-{row}-{column}"], Success = true, Message = "Success" };
+            return new SolarPanelResult { Data = panelsList[$"{section}-{row}-{column}"], Success = true, Message = "Success." };
         }
         /// <summary>
         /// Updates a panel with a certain Section-row-column identifier. Cannot update section/row/column for now
@@ -151,7 +151,7 @@ namespace SolarFarm.BLL
            //Doesn't check material type because that will be validated at input point (chosen from list of valid material types)
 
                 _repo.Update(panel.GetKey(), panel);
-                return new SolarPanelResult { Success = true, Message = "Success", Data = panel };
+                return new SolarPanelResult { Success = true, Message = "Success.", Data = panel };
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace SolarFarm.BLL
         /// <returns>SolarPanelResult indicating success and containing the deleted solar panel in Data</returns>
         public SolarPanelResult Delete(SolarPanel panel)
         {
-            SolarPanelResult result = new SolarPanelResult { Data = panel, Success = true, Message = "Panel deleted" };
+            SolarPanelResult result = new SolarPanelResult { Data = panel, Success = true, Message = $"{panel.GetKey()} removed." };
             _repo.Delete(panel);
 
             return result;

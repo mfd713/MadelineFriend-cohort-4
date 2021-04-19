@@ -34,15 +34,23 @@ namespace SolarFarm.DAL
                     sr.ReadLine(); //first row is just headers
                     for (string line = sr.ReadLine(); line != null; line = sr.ReadLine())
                     {
-                        string[] fields = line.Split(',');
-                        SolarPanel panel = new SolarPanel();
-                        panel.Section = fields[0];
-                        panel.Row = int.Parse(fields[1]);
-                        panel.Column = int.Parse(fields[2]);
-                        panel.DateInstalled = DateTime.Parse(fields[3]);
-                        panel.Material = Enum.Parse<MaterialType>(fields[4]);
-                        panel.IsTracking = bool.Parse(fields[5]);
-                        _panelList.Add(panel.GetKey(), panel);
+                        if (!string.IsNullOrEmpty(line))//lines may be blank after deleting in-program
+                        {
+                            string[] fields = line.Split(',');
+                            SolarPanel panel = new SolarPanel();
+                            panel.Section = fields[0];
+                            panel.Row = int.Parse(fields[1]);
+                            panel.Column = int.Parse(fields[2]);
+                            panel.DateInstalled = DateTime.Parse(fields[3]);
+                            panel.Material = Enum.Parse<MaterialType>(fields[4]);
+                            panel.IsTracking = bool.Parse(fields[5]);
+                            _panelList.Add(panel.GetKey(), panel);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        
                     }
                 }
             }

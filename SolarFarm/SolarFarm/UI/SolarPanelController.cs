@@ -32,8 +32,7 @@ namespace SolarFarm.UI
                 switch (menuChoice)
                 {
                     case 1:
-                        string sectionName = ConsoleIO.PromptString("Section name");
-                        ReadBySection(sectionName);
+                        ReadBySection();
                         ConsoleIO.AnyKeyToContinue();
                         break;
                     case 2:
@@ -41,8 +40,12 @@ namespace SolarFarm.UI
                         ConsoleIO.AnyKeyToContinue();
                         break;
                     case 3:
+                        Update();
+                        ConsoleIO.AnyKeyToContinue();
                         break;
                     case 4:
+                        Remove();
+                        ConsoleIO.AnyKeyToContinue();
                         break;
                     default:
                         shouldContinue = !ShouldLeave();
@@ -50,7 +53,7 @@ namespace SolarFarm.UI
                 }
             } while (shouldContinue);
 
-            ConsoleIO.Display("GoodBye!");
+            ConsoleIO.Display("Good Bye!");
         }
 
         private bool ShouldLeave()
@@ -66,15 +69,24 @@ namespace SolarFarm.UI
             }
         }
 
-        private void ReadBySection(string section)
+        private void ReadBySection()
         {
+            string section = ConsoleIO.PromptString("Section name");
             ListOfPanelsResult result = _service.ReadBySection(section);
             ConsoleIO.Display($"Panels in {section}");
 
-            foreach (var panel in result.Data) 
+            if (result.Success)
             {
-                ConsoleIO.PrintPanel(panel.Value);
+                foreach (var panel in result.Data)
+                {
+                    ConsoleIO.PrintPanel(panel.Value);
+                }
             }
+            else
+            {
+                ConsoleIO.Display(result.Message);
+            }
+            
 
         }
 
@@ -93,6 +105,68 @@ namespace SolarFarm.UI
             SolarPanelResult result = _service.Create(panel);
 
             ConsoleIO.Display(result.Message);
+        }
+
+        private void Update()
+        {
+            //get the panel to change and make sure it exists
+            string section = ConsoleIO.PromptString("Section name");
+            int row = ConsoleIO.PromptInt("Row [1,250]", 1, 250);
+            int column = ConsoleIO.PromptInt("Column [1,250]", 1, 250);
+
+            SolarPanel toAdd = new SolarPanel();
+            
+            SolarPanelResult result = _service.ReadSinglePanel(section, row, column);
+            if (result.Success == false)
+            {
+                ConsoleIO.Display(result.Message);
+                return;
+            }
+            else
+            {
+                //can't currently change the section/row/column, so these stay the same
+                toAdd.Section = result.Data.Section;
+                toAdd.Row = result.Data.Row;
+                toAdd.Column = result.Data.Column;
+
+                ConsoleIO.Display($"Editing {result.Data.GetKey()}\nPress [Enter] to keep original value. Press any other key to begin editing");
+
+                //get new material
+                toAdd.Material = ConsoleIO.PromptMaterialUpdate(result.Data);
+
+                //get new DateInstalled
+                toAdd.DateInstalled = ConsoleIO.PromptDateTimeUpdate(result.Data);
+
+                //get new IsTracking
+                toAdd.IsTracking = ConsoleIO.PromptTrackingUpdate(result.Data);
+            }
+
+            result = _service.Update(toAdd);
+
+            ConsoleIO.Display($"{result.Message} {toAdd.GetKey()} was updated");
+        }
+
+        private void Remove()
+        {
+            //get the panel to change and make sure it exists
+            string section = ConsoleIO.PromptString("Section name");
+            int row = ConsoleIO.PromptInt("Row [1,250]", 1, 250);
+            int column = ConsoleIO.PromptInt("Column [1,250]", 1, 250);
+
+            SolarPanel toRemove = new SolarPanel();
+            
+
+            SolarPanelResult result1 = _service.ReadSinglePanel(section, row, column);
+            if (result1.Success == false)
+            {
+                ConsoleIO.Display(result1.Message);
+                return;
+            }
+            else
+            {
+                SolarPanelResult result2 = _service.Delete(result1.Data);
+                ConsoleIO.Display(result2.Message);
+            }
         }
     }
 }
