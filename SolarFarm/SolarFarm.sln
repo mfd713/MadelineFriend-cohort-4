@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarFarm", "SolarFarm\SolarFarm.csproj", "{1152ABF7-375F-4E99-A429-B4B4997716BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolarFarm", "SolarFarm\SolarFarm.csproj", "{1152ABF7-375F-4E99-A429-B4B4997716BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarFarm.Test", "SolarFarm.Test\SolarFarm.Test.csproj", "{46A7B1AA-EACE-49E3-92F9-5D83319288FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolarFarm.Test", "SolarFarm.Test\SolarFarm.Test.csproj", "{46A7B1AA-EACE-49E3-92F9-5D83319288FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarFarm.Core", "SolarFarm.Core\SolarFarm.Core.csproj", "{ADC32683-7509-43D7-A646-9B9397A9AA54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarFarm.DAL", "SolarFarm.DAL\SolarFarm.DAL.csproj", "{5C9B1720-869F-4B09-B9C8-FC5D7960635C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarFarm.UI", "SolarFarm.UI\SolarFarm.UI.csproj", "{EBB4BCC7-D182-46BF-8939-5553DD635228}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarFarm.BLL", "SolarFarm.BLL\SolarFarm.BLL.csproj", "{0C7A04E0-2026-400F-9AB5-AC7CDC4BDA24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,22 @@ Global
 		{46A7B1AA-EACE-49E3-92F9-5D83319288FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A7B1AA-EACE-49E3-92F9-5D83319288FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46A7B1AA-EACE-49E3-92F9-5D83319288FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADC32683-7509-43D7-A646-9B9397A9AA54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADC32683-7509-43D7-A646-9B9397A9AA54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADC32683-7509-43D7-A646-9B9397A9AA54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADC32683-7509-43D7-A646-9B9397A9AA54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C9B1720-869F-4B09-B9C8-FC5D7960635C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C9B1720-869F-4B09-B9C8-FC5D7960635C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C9B1720-869F-4B09-B9C8-FC5D7960635C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C9B1720-869F-4B09-B9C8-FC5D7960635C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBB4BCC7-D182-46BF-8939-5553DD635228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBB4BCC7-D182-46BF-8939-5553DD635228}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBB4BCC7-D182-46BF-8939-5553DD635228}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBB4BCC7-D182-46BF-8939-5553DD635228}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C7A04E0-2026-400F-9AB5-AC7CDC4BDA24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C7A04E0-2026-400F-9AB5-AC7CDC4BDA24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C7A04E0-2026-400F-9AB5-AC7CDC4BDA24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C7A04E0-2026-400F-9AB5-AC7CDC4BDA24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
