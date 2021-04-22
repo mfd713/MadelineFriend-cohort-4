@@ -12,7 +12,7 @@ namespace ShopKeepExercise
         //private const int HAGGLE_CHANCE = 2;
         public void InteractWithShopkeep(Shopkeeper protag)
         {
-            if(_rand.Next(0, APPEAR_CHANCE) == _rand.Next(0, 100)) //has a 1 in AppearChance probability of happening
+            if (_rand.Next(0, APPEAR_CHANCE) == _rand.Next(0, 100)) //has a 1 in AppearChance probability of happening
             {
                 Dictionary<Item, int> copy = protag.Cart.Inventory;
                 Item itemToTake = copy.Keys.ElementAt(_rand.Next(0, copy.Count - 1));
@@ -23,7 +23,7 @@ namespace ShopKeepExercise
                         $"for its full price of {itemToTake.Value} gold");
                     string userChoice = ConsoleIO.PromptString("Do you want to sell this item? [y/n]");
 
-                    if(userChoice == "y")
+                    if (userChoice == "y")
                     {
                         //protag.Gold += itemToTake.Value;
                         Console.WriteLine("Sold!");
@@ -43,7 +43,7 @@ namespace ShopKeepExercise
                 }
             }
         }
-        
+
         public bool Purchase(Dictionary<Item, int> Inventory)
         {
             return true;

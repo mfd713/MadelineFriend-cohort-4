@@ -1,6 +1,6 @@
 using NUnit.Framework;
-using ShopKeepExercise.GameEngine;
 using ShopKeepExercise;
+
 namespace Tests
 {
     public class EngineTests
@@ -10,7 +10,7 @@ namespace Tests
         public void TravelShouldIncreaseShopkeeperDistanceBy100()
         {
             //arrange
-            Shopkeeper shopkeeper = new Shopkeeper("",new Cart());
+            Shopkeeper shopkeeper = new Shopkeeper("", new Cart());
             GameEngine gameEngine = new GameEngine(shopkeeper);
 
             //act 

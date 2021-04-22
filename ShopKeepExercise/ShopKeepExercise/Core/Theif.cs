@@ -12,15 +12,15 @@ namespace ShopKeepExercise
         public int AppearChance { get; private set; }
         public void InteractWithShopkeep(Shopkeeper protag)
         {
-            if(_rand.Next(0, AppearChance) == _rand.Next(1, 100)) //has a 1 in AppearChance probability of happening
+            if (_rand.Next(0, AppearChance) == _rand.Next(1, 100)) //has a 1 in AppearChance probability of happening
             {
-                if(protag.Cart.ProtectionLvl == 0)
+                if (protag.Cart.ProtectionLvl == 0)
                 {
-                   // protag.Gold -= RobAmount;
+                    // protag.Gold -= RobAmount;
                     Dictionary<Item, int> copy = protag.Cart.Inventory;
                     Item itemToTake = copy.Keys.ElementAt(_rand.Next(0, copy.Count - 1));
 
-                    if(itemToTake != null)
+                    if (itemToTake != null)
                     {
                         Console.WriteLine($"Rats! You encounter bandits, and they steal {RobAmount} gold and a {itemToTake.Name}!");
 

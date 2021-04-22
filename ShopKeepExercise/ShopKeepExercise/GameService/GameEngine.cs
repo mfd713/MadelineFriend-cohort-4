@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ShopKeepExercise.GameEngine
+namespace ShopKeepExercise
 {
     public class GameEngine
     {
