@@ -25,7 +25,7 @@ namespace ShopKeepExercise
 
                     if(userChoice == "y")
                     {
-                        protag.Gold += itemToTake.Value;
+                        //protag.Gold += itemToTake.Value;
                         Console.WriteLine("Sold!");
                         protag.Cart.RemoveInventoryItem(protag.Cart.Inventory, itemToTake);
                     }

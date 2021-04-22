@@ -6,9 +6,17 @@ namespace ShopKeepExercise
 {
     public class Shopkeeper
     {
+        public Shopkeeper(string name, Cart cart)
+        {
+            Name = name;
+            Cart = cart;
+            Distance = 0;
+        }
+
         public string Name { get; private set; }
         public Cart Cart { get; private set; }
         public int Distance { get; set; }
-        public int Gold { get; set; }
+
+
     }
 }

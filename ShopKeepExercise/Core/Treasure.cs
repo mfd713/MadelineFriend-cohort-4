@@ -8,7 +8,8 @@ namespace ShopKeepExercise
     {
         private Random _rand;
         public int AppearChance { get; set; }
-        public void InteractWithShopkeep()
+
+        public void InteractWithShopkeep(Shopkeeper protag)
         {
             throw new NotImplementedException();
         }

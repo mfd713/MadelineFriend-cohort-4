@@ -16,7 +16,7 @@ namespace ShopKeepExercise
             {
                 if(protag.Cart.ProtectionLvl == 0)
                 {
-                    protag.Gold -= RobAmount;
+                   // protag.Gold -= RobAmount;
                     Dictionary<Item, int> copy = protag.Cart.Inventory;
                     Item itemToTake = copy.Keys.ElementAt(_rand.Next(0, copy.Count - 1));
 

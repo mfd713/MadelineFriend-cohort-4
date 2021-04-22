@@ -9,6 +9,8 @@ namespace ShopKeepExercise
         private const int _LIMIT = 5;
         public Dictionary<Item,int> Inventory { get; set; }
         public int ProtectionLvl { get; set; }
+        public int Gold { get; set; }
+
         public bool IsFull { get {
                 return Inventory.Count == _LIMIT;
             } private set { 
