@@ -1,4 +1,5 @@
 ﻿using System;
+using ShopKeepExercise.UI;
 
 namespace ShopKeepExercise
 {
@@ -6,7 +7,10 @@ namespace ShopKeepExercise
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            GameRunner runner = new GameRunner();
+
+            runner.Setup();
+            runner.Run();
         }
     }
 }

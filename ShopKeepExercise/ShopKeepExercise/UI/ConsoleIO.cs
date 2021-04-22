@@ -60,6 +60,38 @@ namespace ShopKeepExercise
             } while (String.IsNullOrEmpty(result));
             return result;
         }
+
+        public static void Display(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        public static void DisplayStats(Shopkeeper keeper)
+        {
+            Console.WriteLine("****Stats****");
+            Console.WriteLine($"Distance Traveled: {keeper.Distance}");
+            Console.WriteLine($"Inventory:");
+            ConsoleIO.PrintInventory(keeper);
+            Console.WriteLine($"Total Gold: {keeper.Cart.Gold}");
+            Console.WriteLine("********");
+
+        }
+
+        public static void PrintInventory(Shopkeeper keeper)
+        {
+            Console.WriteLine("========");
+            foreach (var item in keeper.Cart.Inventory)
+            {
+                Console.WriteLine($"Item: {item.Key.Name}\nValue: {item.Key.Value}\nQuantity: {item.Value}");
+                Console.WriteLine("========");
+
+            }
+        }
+        public static void AnyKeyToContinue()
+        {
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
     }
 
 }

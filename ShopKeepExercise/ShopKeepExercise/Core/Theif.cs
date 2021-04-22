@@ -5,12 +5,14 @@ using System.Linq;
 
 namespace ShopKeepExercise
 {
-    public class Theif : IEncounter
+    public class Theif : Encounter
     {
-        private Random _rand;
+        private Random _rand = new Random();
         public int RobAmount { get; set; }
         public int AppearChance { get; private set; }
-        public void InteractWithShopkeep(Shopkeeper protag)
+        public override string NoItems => $"Rats! You encounter bandits, and they steal {RobAmount} gold. Fortunately? you" +
+                            $"didn't have any items to steal.";
+        public override void InteractWithShopkeep(Shopkeeper protag)
         {
             if (_rand.Next(0, AppearChance) == _rand.Next(1, 100)) //has a 1 in AppearChance probability of happening
             {
@@ -28,8 +30,7 @@ namespace ShopKeepExercise
                     }
                     else
                     {
-                        Console.WriteLine($"Rats! You encounter bandits, and they steal {RobAmount} gold. Fortunately? you" +
-                            $"didn't have any items to steal.");
+                        Console.WriteLine();
 
                     }
 
