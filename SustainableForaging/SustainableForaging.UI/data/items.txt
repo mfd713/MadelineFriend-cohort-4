@@ -29,3 +29,4 @@ id,name,category,dollars/kilogram
 28,Nightshade,Poisonous,0.00
 29,cattail head,Inedible,0.00
 30,Bigotry,Poisonous,0.00
+31,Tar,Inedible,0.00
