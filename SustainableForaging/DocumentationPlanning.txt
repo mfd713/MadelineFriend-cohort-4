@@ -1,0 +1,36 @@
+DONE 1. View Foragers
+	0. Add tests
+	1. Prompt user for 'last name starts with' (UI)
+	2. Retrieve based on input (DAL returns all, BLL finds the particular ones)
+	3. Display result
+		a. If no Foragers with that last name prefix, inform the user
+		b. If there are Foragers with that last name prefix, show First + Last + State for all
+DONE 2. Add a Forager
+		0. Add tests
+	-Follow similar procedure to Add Forage
+		1. Get First, Last, State from user (UI)
+		2. Validate
+			a. First, Last, State cannot be empty (BLL)
+			b. First+Last+State must be unique (BLL)
+		3. Use GUID for ID (DAL)
+		4. Add via the DAL
+		5. Report result to user
+DONE 3. Create Kg/Item Daily Report
+		0. Add Tests
+	- Put in BLL
+		1. Get list of forages for that day with Forage.FindByDate
+		2. Use LINQ to GroupBy Item and Sum Kg from each forage of that Item
+			keep in mind the LINQ return type--will OrderBy returns IEnumerable<Grouping>
+DONE 4. Create $/Category Daily Report
+		0. Add tests
+	- Put in BLL
+		1. Get list of forages for that day with Forage.FindByDate
+		2. Use LINQ to GroupBy Item.Category and Sum $ from each forage in that category
+DONE 5. Fix forage validation to prevent adding same item from same forager on same day
+	0. Add to ForageServiceTest case that checks for same forager+item+day
+	1. add to the ValidateFields method
+	2. Add logic to increase instead. Put it in service, probably in Add method (or a helper in Add)
+6. Use Ninject to set up the Forage/Forager/Item Repositories and Services
+
+Stretch idea
+7. Change forager lookup to be case insensitive

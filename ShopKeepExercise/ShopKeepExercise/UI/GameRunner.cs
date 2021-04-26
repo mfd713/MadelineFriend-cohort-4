@@ -9,6 +9,9 @@ namespace ShopKeepExercise.UI
         public Shopkeeper Protag { get; set; }
         public GameEngine Engine { get; set; }
         private const int _TRAVELER_CHANCE = 10;
+        private int TheifChance;
+        private int TheifRobAmount;
+        private int ProtectionPrice;
         public void Setup()
         {
             //TODO: change encounters
@@ -17,6 +20,9 @@ namespace ShopKeepExercise.UI
             Engine = new GameEngine(Protag, encounter);
             ConsoleIO.Display($"And now, {Protag.Name}, your journey begins!");
             ConsoleIO.AnyKeyToContinue();
+            TheifChance = 10; 
+            TheifRobAmount = 100;
+            ProtectionPrice = 60;
         }
         public void Run()
         {
@@ -33,6 +39,7 @@ namespace ShopKeepExercise.UI
                 //if chance is right, do a traveler encounter
                 if (random.Next(1, 100) < _TRAVELER_CHANCE)
                 {
+                    Engine.SetEncounter(new Traveler());
                     mostRecentEncounter = Engine.RunEncounter();
                 }
 
@@ -42,6 +49,49 @@ namespace ShopKeepExercise.UI
                     ConsoleIO.AnyKeyToContinue();
                 }
 
+                //Every 500 miles, chance for a thief encounter
+                if (Protag.Distance % 500 == 0)
+                {
+                    if (random.Next(1, 100) < TheifChance)
+                    {
+                        Thief theif = new Thief();
+                        theif.RobAmount = TheifRobAmount;
+                        Engine.SetEncounter(theif);
+
+                        mostRecentEncounter = Engine.RunEncounter();
+                        //increase theif rob amount after encounter
+                        TheifRobAmount += 10;
+                    }
+                }
+
+                if (mostRecentEncounter.Message != null && mostRecentEncounter.Message.Length > 0)
+                {
+                    ConsoleIO.Display(mostRecentEncounter.Message);
+                    ConsoleIO.AnyKeyToContinue();
+                }
+
+                //Every 600 miles, increase thief chance but also allow protection purchace
+                if(Protag.Distance % 600 == 0)
+                {
+                    TheifChance += 2;
+                    string getProtection = ConsoleIO.PromptString($"Would you like to purchase protection for {ProtectionPrice} gold? [y/n]");
+                    if(getProtection.ToLower() == "y")
+                    {
+                        //spent money
+                        Protag.Cart.Gold -= ProtectionPrice;
+                        //increase level
+                        Protag.Cart.ProtectionLvl += 1;
+
+                        ConsoleIO.Display($"Your protection level is now {Protag.Cart.ProtectionLvl}");
+                    }
+                    else
+                    {
+                        ConsoleIO.Display("You decide against protection");
+                    }
+                }
+
+                
+
                 //show stats at turn end
                 ConsoleIO.DisplayStats(Protag);
                 ConsoleIO.AnyKeyToContinue();
@@ -49,6 +99,8 @@ namespace ShopKeepExercise.UI
                 //game is over if Gold hits 0
                 gameIsOver = Protag.Cart.Gold <= 0;
             } while (!gameIsOver);
+
+            ConsoleIO.Display("Game over!");
         }
 
         private Shopkeeper InitializeProtagonist()
@@ -64,7 +116,7 @@ namespace ShopKeepExercise.UI
             switch (inventoryChoice)
             {
                 case 1:
-                    inventory.Add(new Item("Sword", 100), 1);
+                    inventory.Add(new Item("Sword NFT", 100), 1);
                     cart.Inventory = inventory;
                     ConsoleIO.Display($"You are a mighty weapons dealer, your inventory contains 1 sword!");
                     break;

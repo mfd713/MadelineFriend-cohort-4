@@ -24,7 +24,7 @@ namespace Tests
         }
 
         [Test]
-        public void EncounterNegativeCaseIfItems0()
+        public void TravelerEncounterNegativeCaseIfItems0()
         {
             //arrange
             Dictionary<Item, int> inv = new Dictionary<Item, int>();
@@ -47,7 +47,31 @@ namespace Tests
             Assert.AreEqual($"You encounter a traveler, but because you have nothing to sell, you merely exchange" +
                         $" plesantries and continue on your way.", result.Message);
         }
+        [Test]
+        public void ThiefEncounterNegativeCaseIfItems0()
+        {
+            //arrange
+            Dictionary<Item, int> inv = new Dictionary<Item, int>();
 
+            Cart cart = new Cart
+            {
+                Gold = 100,
+                ProtectionLvl = 0,
+                Inventory = inv
+            };
+            Thief theif = new Thief();
+            theif.RobAmount = 100;
+            Shopkeeper shopkeeper = new Shopkeeper("", cart);
+            GameEngine gameEngine = new GameEngine(shopkeeper, theif);
+
+            //act
+            Result result = gameEngine.RunEncounter();
+
+            //assert
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual($"Rats! You encounter bandits, and they steal 100 gold. Fortunately? you" +
+                            $" didn't have any items to steal.", result.Message);
+        }
         //[Test]
         //public void RunInteractCaseIfItemsMoreThan0() 
         //{

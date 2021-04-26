@@ -27,6 +27,10 @@ namespace ShopKeepExercise
             return protag;
         }
 
+        public void SetEncounter(Encounter encounter)
+        {
+            this.encounter = encounter;
+        }
         public Result RunEncounter()
         {
             //if there are no items in the cart, encounter should be nothing case
