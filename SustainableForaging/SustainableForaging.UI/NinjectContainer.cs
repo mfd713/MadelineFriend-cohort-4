@@ -26,12 +26,7 @@ namespace SustainableForaging.UI
             Kernel.Bind<IForagerRepository>().To<ForagerFileRepository>()
                 .WithConstructorArgument("filePath",
                 Path.Combine(projectDirectory, "data", "foragers.csv"));
-            Kernel.Bind<ForageService>().To<ForageService>();
-            Kernel.Bind<ForagerService>().To<ForagerService>();
-            Kernel.Bind<ItemService>().To<ItemService>();
-            Kernel.Bind<Report>().To<Report>();
-            Kernel.Bind<ConsoleIO>().To<ConsoleIO>();
-            Kernel.Bind<View>().To<View>();
+
         }
     }
 }
