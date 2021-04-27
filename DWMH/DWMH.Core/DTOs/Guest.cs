@@ -8,5 +8,11 @@ namespace DWMH.Core
 {
     public class Guest
     {
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+
+        public string Email { get; set; }
+
+        public int ID { get; set; }
     }
 }
