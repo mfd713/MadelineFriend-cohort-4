@@ -10,9 +10,25 @@ namespace TestsDAL.TestDoubles
 {
     public class HostRepoDouble : IHostRepository
     {
+        private List<Host> hosts = new List<Host>();
+
+        public HostRepoDouble()
+        {
+            Host host = new Host
+            {
+                LastName = "Testy1",
+                ID = "abc-123",
+                Email = "test1@gmail.com",
+                City = "Chicago",
+                State = "IL",
+            };
+            host.SetRates(50M, 80M);
+
+            hosts.Add(host);
+        }
         public List<Host> ReadAll()
         {
-            throw new NotImplementedException();
+            return hosts;
         }
 
         public Host ReadByEmail(string email)

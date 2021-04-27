@@ -10,9 +10,23 @@ namespace TestsDAL.TestDoubles
 {
     public class GuestRepoDouble : IGuestRepository
     {
+        private List<Guest> _guests = new List<Guest>();
+
+        public GuestRepoDouble()
+        {
+            Guest guest = new Guest
+            {
+                LastName = "Testington",
+                FirstName = "Tesla",
+                Email = "tt@gmail.com",
+                ID = 1
+            };
+
+            _guests.Add(guest);
+        }
         public List<Guest> ReadAll()
         {
-            throw new NotImplementedException();
+            return _guests;
         }
 
         public Guest ReadByEmail(string email)

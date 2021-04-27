@@ -14,5 +14,19 @@ namespace DWMH.Core
         public string Email { get; set; }
 
         public int ID { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Guest guest &&
+                   LastName == guest.LastName &&
+                   FirstName == guest.FirstName &&
+                   Email == guest.Email &&
+                   ID == guest.ID;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(LastName, FirstName, Email, ID);
+        }
     }
 }
