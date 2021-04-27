@@ -92,6 +92,7 @@ namespace SustainableForaging.BLL.Tests
             Result<Forager> result = service.Add(forager);
 
             Assert.IsFalse(result.Success);
+            //TOD: assert to check the messages that were returned to validate correct reason for failure
             File.Delete("temp.csv");
         }
     }

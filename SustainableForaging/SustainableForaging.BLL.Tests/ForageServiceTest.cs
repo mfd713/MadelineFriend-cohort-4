@@ -73,6 +73,7 @@ namespace SustainableForaging.BLL.Tests
             Result<Forage> result = service.Add(forage);
 
             Assert.IsFalse(result.Success);
+            //TODO: validate correct message
         }
     }
 }
