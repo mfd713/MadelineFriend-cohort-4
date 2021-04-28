@@ -31,7 +31,7 @@ namespace TestsDAL.TestDoubles
 
         public Guest ReadByEmail(string email)
         {
-            throw new NotImplementedException();
+            return ReadAll().Where(g => g.Email == email).FirstOrDefault();
         }
     }
 }

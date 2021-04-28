@@ -33,8 +33,16 @@ namespace TestsDAL.TestDoubles
             };
             host.SetRates(50M, 80M);
 
-            Reservation reservation = new Reservation(new DateTime(2020, 1, 1), new DateTime(2020, 1, 8),
-                host, guest);
+            Reservation reservation = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = host,
+                Guest = guest
+            };
+            
+
+            reservation.SetTotal();
             reservation.ID = 1;
 
 
@@ -42,7 +50,15 @@ namespace TestsDAL.TestDoubles
         }
         public Reservation Create(Reservation reservation)
         {
-            throw new NotImplementedException();
+            //set reservation ID
+            int maxID = _reservations.Max(r => r.ID) + 1;
+            reservation.ID = maxID;
+
+            //add it to the list
+            _reservations.Add(reservation);
+
+            //return added reservation with ID
+            return reservation;
         }
 
         public Reservation Delete(Reservation reservation)

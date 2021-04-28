@@ -40,8 +40,14 @@ namespace TestsDAL
                 ID = 1
             };
 
-            Reservation reservation = new Reservation(new DateTime(2020, 1, 1), new DateTime(2020, 1, 8),
-                host, guest);
+            Reservation reservation = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = host,
+                Guest = guest
+            };
+            reservation.SetTotal();
             reservation.ID = 1;
 
             //act
@@ -58,7 +64,7 @@ namespace TestsDAL
             Assert.AreEqual(guest, guestResult[0]);
             //reservation list has length 1, reservation in it == expected one
             Assert.AreEqual(1, resResult.Count);
-            Assert.AreEqual(460M, resResult[0].Total);
+            Assert.AreEqual(410M, resResult[0].Total);
             Assert.AreEqual(reservation, resResult[0]);
         }
 
@@ -74,6 +80,27 @@ namespace TestsDAL
             List<Reservation> resResult = resRepo.ReadByHost(host);
 
             Assert.AreEqual(0, resResult.Count);
+        }
+
+        [Test]
+        public void ShouldAddReservationToList()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            Reservation toAdd = new Reservation{
+                StartDate = new DateTime(2022, 02, 02), 
+                EndDate = new DateTime(2022, 02, 05),
+                Host = hostRepo.ReadAll()[0], 
+                Guest = guestRepo.ReadAll()[0] };
+            
+
+            Reservation result = resRepo.Create(toAdd);
+            
+
+            Assert.AreEqual(2, resRepo.ReadByHost(hostRepo.ReadAll()[0]).Count);
+            Assert.AreEqual(result, resRepo.ReadByHost(hostRepo.ReadAll()[0])[1]);
         }
     }
 }

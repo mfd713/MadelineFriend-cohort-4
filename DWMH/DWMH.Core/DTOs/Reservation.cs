@@ -22,22 +22,17 @@ namespace DWMH.Core
         }
         public Host Host { get; set; }
 
-        public Reservation(DateTime startDate, DateTime endDate, Host host, Guest guest)
+        public void SetTotal()
         {
-            StartDate = startDate;
-            EndDate = endDate;
-            Host = host;
-            Guest = guest;
-
-            for (DateTime d = StartDate; d <= EndDate; d = d.AddDays(1))
+            for (DateTime d = StartDate; d < EndDate; d = d.AddDays(1))
             {
                 if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
                 {
-                    _total += host.WeekendRate;
+                    _total += Host.WeekendRate;
                 }
                 else
                 {
-                    _total += host.StandardRate;
+                    _total += Host.StandardRate;
                 }
             }
         }

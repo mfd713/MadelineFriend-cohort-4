@@ -24,7 +24,15 @@ namespace DWMH.BLL
 
         public Result<Reservation> Create(Reservation reservation)
         {
-            throw new System.NotImplementedException();
+            Result<Reservation> result = Validate(reservation);
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            result.Value = reservationRepo.Create(reservation);
+
+            return result;
         }
 
         public Result<List<Reservation>> ViewByHost(Host host)
@@ -58,9 +66,32 @@ namespace DWMH.BLL
             {
                 reservation.Host = hostMap[host.ID];
                 reservation.Guest = guestMap[reservation.Guest.ID];
+                if (reservation.Total == 0)
+                { 
+                    reservation.SetTotal(); 
+                }
             }
 
-            result.Value = reservations;
+            result.Value = reservations.OrderBy(r => r.StartDate).ToList();
+            return result;
+
+        }
+
+        public Result<Guest> FindGuestByEmail(string email)
+        {
+            Result < Guest > result = new Result<Guest>();
+
+            Guest guest = guestRepo.ReadByEmail(email);
+
+            if(guest == null)
+            {
+                result.AddMessage("guest not found");
+            }
+            else
+            {
+                result.Value = guest;
+            }
+
             return result;
 
         }
@@ -77,22 +108,108 @@ namespace DWMH.BLL
 
         private Result<Reservation> Validate(Reservation reservation)
         {
-            throw new System.NotImplementedException();
+            Result<Reservation> result = ValidateNulls(reservation);
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            ValidateDates(reservation, result);
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            ValidateChildren(reservation, result);
+
+            return result; ;
         }
 
-        private Result<Reservation> ValidateNulls(string reservation)
+        private Result<Reservation> ValidateNulls(Reservation reservation)
         {
-            throw new System.NotImplementedException();
+            Result<Reservation> result = new Result<Reservation>();
+
+            if(reservation == null)
+            {
+                result.AddMessage("no reservation to save");
+                return result;
+            }
+
+            if(reservation.Host == null)
+            {
+                result.AddMessage("host is required");
+            }
+            
+            if(reservation.Guest == null)
+            {
+                result.AddMessage("guest is required");
+            }
+
+            return result;
         }
 
-        private void ValidateFields(Reservation reservation, Result<Reservation> result)
+        private void ValidateDates(Reservation reservation, Result<Reservation> result)
         {
-            throw new System.NotImplementedException();
+            //must have start date
+            if (reservation.StartDate.Ticks == 0)
+            {
+                result.AddMessage("start date required");
+            }
+            //must have end date
+            if (reservation.EndDate.Ticks == 0)
+            {
+                result.AddMessage("end date required");
+            }
+            //start date must be future
+            if(reservation.StartDate < DateTime.Now)
+            {
+                result.AddMessage("start date must be in the future");
+            }
+            //start date must be before end date
+            if(reservation.StartDate >= reservation.EndDate)
+            {
+                result.AddMessage("start date must be before end date");
+            }
+
+            List<Reservation> fullList = reservationRepo.ReadByHost(reservation.Host);
+
+            //check overlaps
+            foreach (var existingRes in fullList)
+            {
+
+                //startExisting <= endNew && endNew <= endExisting
+                if (existingRes.StartDate <= reservation.EndDate && reservation.EndDate <= existingRes.EndDate)
+                { 
+                    result.AddMessage("end date cannot be in the during an existing reservation");
+                }
+
+                //startExisting <= startNew && startNew<= endExisting
+                if (existingRes.StartDate <= reservation.StartDate && reservation.StartDate <= existingRes.EndDate)
+                {
+                    result.AddMessage("start date cannot be during an existing reservation");
+                }
+                // startNew <= startExisting && endNew >= endExisting
+                else if
+                (reservation.StartDate <= existingRes.StartDate && reservation.EndDate >= existingRes.EndDate)
+                {
+                    result.AddMessage("new reservation dates cannot contain an existing reservation");
+                }
+            }
         }
 
-        private void ValidateChildren(Reservation reservation, string result)
+        private void ValidateChildren(Reservation reservation, Result<Reservation> result)
         {
-            throw new System.NotImplementedException();
+            if(reservation.Host.ID == null ||
+                !hostRepo.ReadAll().Contains(reservation.Host))
+            {
+                result.AddMessage("host not found");
+            }
+
+            if(reservation.Guest.ID ==0 ||
+                !guestRepo.ReadAll().Contains(reservation.Guest))
+            {
+                result.AddMessage("guest not found");
+            }
         }
     }
 

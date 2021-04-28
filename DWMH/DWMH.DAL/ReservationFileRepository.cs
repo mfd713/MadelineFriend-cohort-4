@@ -22,7 +22,18 @@ namespace DWMH.DAL
 
         public Reservation Create(Reservation reservation)
         {
-            throw new NotImplementedException();
+            List<Reservation> reservations = ReadByHost(reservation.Host);
+
+            //set reservation ID
+            int maxID = reservations.Max(r => r.ID) + 1;
+            reservation.ID = maxID;
+
+            //add it to the list and write
+            reservations.Add(reservation);
+            Write(reservations, reservation.Host.ID);
+
+            //return added reservation with ID
+            return reservation;
         }
 
         public Reservation Delete(Reservation reservation)
@@ -68,9 +79,27 @@ namespace DWMH.DAL
             throw new NotImplementedException();
         }
 
-        private void Write(List<Reservation> reservations)
+        private void Write(List<Reservation> reservations, string hostID)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using StreamWriter writer = new StreamWriter(GetFilePath(hostID));
+                writer.WriteLine(HEADER);
+
+                if (reservations == null)
+                {
+                    return;
+                }
+
+                foreach (var reservation in reservations)
+                {
+                    writer.WriteLine(Serialize(reservation));
+                }
+            }
+            catch (Exception e)
+            {
+                throw new RepositoryException("could not write reservations", e);
+            }
         }
 
         private string Serialize(Reservation reservation)
@@ -86,7 +115,7 @@ namespace DWMH.DAL
 
         private Reservation Deserealize(string[] entry, string hostEmail)
         {
-            if(entry.Length != 5)
+            if (entry.Length != 5)
             {
                 return null;
             }
@@ -97,9 +126,13 @@ namespace DWMH.DAL
             Host host = new Host();
             host.Email = hostEmail;
 
-            Reservation reservation = new Reservation(DateTime.Parse(entry[1]), DateTime.Parse(entry[2]),
-                host, guest);
+            Reservation reservation = new Reservation{
+                StartDate = DateTime.Parse(entry[1]), 
+                EndDate = DateTime.Parse(entry[2]),
+                Host = host, 
+                Guest = guest };
             reservation.ID = int.Parse(entry[0]);
+            //reservation.Total = decimal.Parse(entry[4]);
 
             return reservation;
         }

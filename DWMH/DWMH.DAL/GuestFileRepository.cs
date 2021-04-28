@@ -61,7 +61,9 @@ namespace DWMH.DAL
 
         public Guest ReadByEmail(string email)
         {
-            throw new NotImplementedException();
+            List<Guest> guests = ReadAll();
+
+            return guests.Where(g => g.Email == email).FirstOrDefault();
         }
     }
 }

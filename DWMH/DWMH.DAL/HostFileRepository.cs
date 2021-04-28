@@ -47,8 +47,8 @@ namespace DWMH.DAL
                     Email = fields[2],
                     City = fields[5],
                     State = fields[6],
-                    StandardRate = decimal.Parse(fields[7]),
-                    WeekendRate = decimal.Parse(fields[8]),
+                    StandardRate = decimal.Parse(fields[8]),
+                    WeekendRate = decimal.Parse(fields[9]),
                 };
 
                 if (host != null)

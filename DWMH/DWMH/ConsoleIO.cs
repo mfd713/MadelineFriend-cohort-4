@@ -119,6 +119,7 @@ namespace DWMH
         /// </summary>
         public static void AnyKeyToContinue()
         {
+            Console.WriteLine();
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
@@ -131,11 +132,31 @@ namespace DWMH
 
             foreach (var res in reservations)
             {
-                DisplayLine($"ID: {res.ID}, {res.StartDate:d} - {res.EndDate:d}, Guest: {res.Guest.LastName}," +
-                    $" {res.Guest.FirstName}, Email: {res.Guest.Email}");
+                DisplayLine($"ID: {res.ID}, {res.StartDate:d} - {res.EndDate:d} Guest: {res.Guest.LastName}," +
+                    $" {res.Guest.FirstName}, Email: {res.Guest.Email}\nTotal: {res.Total:C}");
             }
         }
 
+        public static void DisplayReservationSummary(Reservation reservation)
+        {
+            DisplayLine("");
+            DisplayLine($"Summary:\nStart Date: {reservation.StartDate:d}\nEnd Date: {reservation.EndDate:d}" +
+                $"\nTotal: {reservation.Total:C}");
+            DisplayLine("");
+        }
+
+        public static bool PromptYesNo()
+        {
+            string input = PromptString("Is this correct? [y/n]", false).ToLower();
+            if(input == "y")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static void DisplayStatus(bool success, string message)
         {
             DisplayStatus(success, new List<string>() { message });
@@ -145,10 +166,12 @@ namespace DWMH
         {
             DisplayLine("");
             DisplayLine(success ? "Success" : "Error");
+            Console.ForegroundColor = ConsoleColor.Yellow;
             foreach (string message in messages)
             {
                 DisplayLine(message);
             }
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
     }
 }
