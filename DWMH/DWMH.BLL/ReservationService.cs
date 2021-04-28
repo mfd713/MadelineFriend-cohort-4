@@ -27,9 +27,42 @@ namespace DWMH.BLL
             throw new System.NotImplementedException();
         }
 
-        public Result<Reservation> ViewByHost(string email)
+        public Result<List<Reservation>> ViewByHost(Host host)
         {
-            throw new System.NotImplementedException();
+            //match the host with an ID
+            Dictionary<string, Host> hostMap = hostRepo.ReadAll()
+                .ToDictionary(i => i.ID);
+
+            foreach (var hostID in hostMap)
+            {
+                if (hostID.Value.Email == host.Email)
+                {
+                    host.ID = hostID.Key;
+                    break;
+                }
+            }
+            //get list of reservations
+            List<Reservation> reservations = reservationRepo.ReadByHost(host);
+
+            Dictionary<int, Guest> guestMap = guestRepo.ReadAll()
+                .ToDictionary(i => i.ID);
+
+            //return false and null list if no reservations found
+            Result<List<Reservation>> result = new Result<List<Reservation>>();
+            if(reservations.Count == 0)
+            {
+                result.AddMessage("no reservations found for host");
+            }
+
+            foreach (var reservation in reservations)
+            {
+                reservation.Host = hostMap[host.ID];
+                reservation.Guest = guestMap[reservation.Guest.ID];
+            }
+
+            result.Value = reservations;
+            return result;
+
         }
 
         public Result<Reservation> Update(int id)

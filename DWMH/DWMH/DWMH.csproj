@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DWMH.BLL\DWMH.BLL.csproj" />
     <ProjectReference Include="..\DWMH.Core\DWMH.Core.csproj" />
+    <ProjectReference Include="..\DWMH.DAL\DWMH.DAL.csproj" />
   </ItemGroup>
 
 </Project>
