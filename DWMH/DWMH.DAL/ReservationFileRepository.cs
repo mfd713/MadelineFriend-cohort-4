@@ -132,7 +132,7 @@ namespace DWMH.DAL
                 Host = host, 
                 Guest = guest };
             reservation.ID = int.Parse(entry[0]);
-            //reservation.Total = decimal.Parse(entry[4]);
+            reservation.SetTotal(decimal.Parse(entry[4]));
 
             return reservation;
         }

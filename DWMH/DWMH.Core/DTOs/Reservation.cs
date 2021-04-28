@@ -36,6 +36,10 @@ namespace DWMH.Core
                 }
             }
         }
+        public void SetTotal(decimal total)
+        {
+            _total = total;
+        }
         public override bool Equals(object obj)
         {
             return obj is Reservation reservation &&
