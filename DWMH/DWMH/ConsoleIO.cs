@@ -90,7 +90,7 @@ namespace DWMH
         /// </summary>
         /// <param name="message">Message used to prompt the user</param>
         /// <param name="emptyOk">Setting for whether an empty string is allowed</param>
-        /// <returns>DateTime representing the user's input</returns>
+        /// <returns>DateTime representing the user's input, or default DateTime if input was empty</returns>
         public static DateTime PromptDateTime(string message, bool emptyOk)
         {
             string input = PromptString(message,emptyOk);
@@ -106,7 +106,10 @@ namespace DWMH
             }
             else
             {
-                date = default(DateTime);
+                if (!DateTime.TryParse(input, out date))
+                {
+                    date = default(DateTime);
+                }
             }
 
             return date;

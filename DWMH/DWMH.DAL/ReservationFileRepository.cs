@@ -74,9 +74,32 @@ namespace DWMH.DAL
             return reservations;
         }
 
-        public Reservation Update(int id)
+        public Reservation Update(int id, Reservation reservation)
         {
-            throw new NotImplementedException();
+            //get list of reservations for the given host
+            List<Reservation> _reservations = ReadByHost(reservation.Host);
+
+            Reservation result = null;
+
+            //find the reservation ID, update, re-write it
+            foreach (var existingReservation in _reservations)
+            {
+                if (existingReservation.ID == id)
+                {
+                    existingReservation.StartDate = reservation.StartDate;
+                    existingReservation.EndDate = reservation.EndDate;
+                    existingReservation.Guest = reservation.Guest;
+                    existingReservation.Host = reservation.Host;
+                    existingReservation.SetTotal();
+
+                    Write(_reservations, existingReservation.Host.ID);
+                    result = existingReservation;
+                    return result;
+                }
+            }
+
+            //return null if not found
+            return result;
         }
 
         private void Write(List<Reservation> reservations, string hostID)
@@ -96,7 +119,7 @@ namespace DWMH.DAL
                     writer.WriteLine(Serialize(reservation));
                 }
             }
-            catch (Exception e)
+            catch (IOException e)
             {
                 throw new RepositoryException("could not write reservations", e);
             }

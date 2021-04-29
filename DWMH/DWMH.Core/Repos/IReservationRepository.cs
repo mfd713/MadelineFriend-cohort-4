@@ -10,7 +10,7 @@ namespace DWMH.Core.Repos
     {
         public Reservation Create(Reservation reservation);
         public List<Reservation> ReadByHost(Host host);
-        public Reservation Update(int id);
+        public Reservation Update(int id, Reservation reservation);
         public Reservation Delete(Reservation reservation);
     }
 }

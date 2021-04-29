@@ -81,9 +81,25 @@ namespace TestsDAL.TestDoubles
             return result;
         }
 
-        public Reservation Update(int id)
+        public Reservation Update(int id, Reservation reservation)
         {
-            throw new NotImplementedException();
+            Reservation result = null;
+            foreach (var existingReservation in _reservations)
+            {
+                if(existingReservation.ID == id)
+                {
+                    existingReservation.StartDate = reservation.StartDate;
+                    existingReservation.EndDate = reservation.EndDate;
+                    existingReservation.Guest = reservation.Guest;
+                    existingReservation.Host = reservation.Host;
+                    existingReservation.SetTotal();
+
+                    result = existingReservation;
+                    return result;
+                }
+            }
+
+            return result;
         }
     }
 }

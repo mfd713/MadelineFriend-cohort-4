@@ -83,6 +83,27 @@ namespace TestsDAL
         }
 
         [Test]
+        public void ShouldReturnGuestWithEmail()
+        {
+            IGuestRepository guestRepository= new GuestRepoDouble();
+            var guestList = guestRepository.ReadAll();
+
+            Guest guest = guestRepository.ReadByEmail("tt@gmail.com");
+
+            Assert.AreEqual(guest, guestList[0]);
+        }
+
+        [Test]
+        public void ShouldReturnNullWhenNoGuestsWithEmail()
+        {
+            IGuestRepository guestRepository = new GuestRepoDouble();
+
+            Guest guest = guestRepository.ReadByEmail("t@gmail.com");
+
+            Assert.IsNull(guest);
+        }
+
+        [Test]
         public void ShouldAddReservationToList()
         {
             IReservationRepository resRepo = new ReservationRepoDouble();
@@ -101,6 +122,66 @@ namespace TestsDAL
 
             Assert.AreEqual(2, resRepo.ReadByHost(hostRepo.ReadAll()[0]).Count);
             Assert.AreEqual(result, resRepo.ReadByHost(hostRepo.ReadAll()[0])[1]);
+        }
+
+        [Test]
+        public void ShouldUpdateReservation()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            Reservation toChange = new Reservation
+            {
+                StartDate = new DateTime(2022, 02, 03),
+                EndDate = new DateTime(2022, 02, 06),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0],
+                ID = 1
+            };
+
+            Reservation result = resRepo.Update(1, toChange);
+
+            Assert.AreEqual(1,result.ID);
+            Assert.AreEqual(toChange.StartDate, result.StartDate);
+            Assert.AreEqual(toChange.EndDate, result.EndDate);
+            Assert.AreEqual(guestRepo.ReadAll()[0], result.Guest);
+            Assert.AreEqual(hostRepo.ReadAll()[0], result.Host);
+            Assert.AreEqual(180M, result.Total);
+            Assert.AreEqual(1, resRepo.ReadByHost(hostRepo.ReadAll()[0]).Count);
+        }
+
+        [Test]
+        public void ShouldNotUpdateWhenIDNotInList()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            Reservation toChange = new Reservation
+            {
+                StartDate = new DateTime(2022, 02, 03),
+                EndDate = new DateTime(2022, 02, 06),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            toChange.SetTotal();
+
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+            Reservation result = resRepo.Update(2, toChange);
+
+            Assert.IsNull(result);
+            Assert.AreEqual(resRepo.ReadByHost(hostRepo.ReadAll()[0])[0], copy);
+            Assert.AreEqual(1, resRepo.ReadByHost(hostRepo.ReadAll()[0]).Count);
         }
     }
 }

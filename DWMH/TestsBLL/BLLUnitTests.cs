@@ -321,5 +321,246 @@ namespace TestsBLL
             Assert.IsTrue(result.Messages[0].Contains("host"));
             Assert.IsNull(result.Value);
         }
+
+        [Test]
+        public void UpdateShouldSucceed()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
+
+            Host host = hostRepo.ReadAll()[0];
+            Guest guest = guestRepo.ReadAll()[0];
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2021, 12, 28),
+                EndDate = new DateTime(2021, 12, 29),
+                Guest = guest,
+                Host = host
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+            Reservation toUpdate = new Reservation
+            {
+                StartDate = new DateTime(2021, 12, 28),
+                EndDate = new DateTime(2021, 12, 29),
+                Host = host,
+                Guest = guest,
+                ID = 1
+            };
+
+            var result = service.Update(1, toUpdate);
+
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(copy, result.Value);
+            Assert.AreEqual(copy, service.ViewByHost(host).Value[0]);
+            Assert.AreEqual(1, service.ViewByHost(host).Value.Count);
+        }
+        [Test]
+        public void UpdateShouldNotAllowNullHost()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
+
+            Host host = null;
+            
+            Reservation toChange = new Reservation
+            {
+                StartDate = new DateTime(2022, 02, 03),
+                EndDate = new DateTime(2022, 02, 06),
+                Host = host,
+                Guest = guestRepo.ReadAll()[0],
+                ID = 1
+            };
+
+
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+            Result<Reservation> result = service.Update(1, toChange);
+
+            Assert.IsFalse(result.Success);
+            Assert.IsTrue(result.Messages[0].Contains("host"));
+            Assert.IsNull(result.Value);
+            Assert.AreEqual(copy, service.ViewByHost(hostRepo.ReadAll()[0]).Value[0]);
+            Assert.AreEqual(1, service.ViewByHost(hostRepo.ReadAll()[0]).Value.Count);
+        }
+
+        [Test]
+        public void UpdateShouldNotAllowNullGuest()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
+
+            Host host = hostRepo.ReadAll()[0];
+            Guest guest = null; 
+
+            Reservation toChange = new Reservation
+            {
+                StartDate = new DateTime(2022, 02, 03),
+                EndDate = new DateTime(2022, 02, 06),
+                Host = host,
+                Guest = guest,
+                ID = 1
+            };
+
+
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = host,
+                Guest = guestRepo.ReadAll()[0]
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+            Result<Reservation> result = service.Update(1, toChange);
+
+            Assert.IsFalse(result.Success);
+            Assert.IsTrue(result.Messages[0].Contains("guest"));
+            Assert.IsNull(result.Value);
+            Assert.AreEqual(copy, service.ViewByHost(hostRepo.ReadAll()[0]).Value[0]);
+            Assert.AreEqual(1, service.ViewByHost(hostRepo.ReadAll()[0]).Value.Count);
+        }
+
+        //start date must be future
+        [TestCase("2020,02,20", "2022,02,06")]
+        //start date must be before end date
+        [TestCase("2021,06,09", "2021,06,05")]
+        //startExisting <= endNew && endNew <= endExisting
+        [TestCase("2021,12,30", "2022,01,05")]
+        //startExisting <= startNew && startNew<= endExisting
+        [TestCase("2022,1,3", "2022,01,12")]
+        //startNew >= startExisting && endNew <= endExisting
+        [TestCase("2022, 01, 03", "2022, 01, 08")]
+        // startNew <= startExisting && endNew >= endExisting
+        [TestCase("2021,12,30", "2022, 01, 11")]
+        public void UpdateShouldNotAllowInvalidDates(string newStart, string newEnd)
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
+
+            Host host = hostRepo.ReadAll()[0];
+            Guest guest = guestRepo.ReadAll()[0];
+            Reservation toAdd = new Reservation
+            {
+                StartDate = new DateTime(2021,12,28),
+                EndDate = new DateTime(2021,12,29),
+                Guest = guest,
+                Host = host
+            };
+            toAdd.SetTotal();
+
+            Reservation toUpdate = new Reservation
+            {
+                StartDate = DateTime.Parse(newStart),
+                EndDate = DateTime.Parse(newEnd),
+                Host = host,
+                Guest = guest,
+                ID = 2
+            };
+
+           var adddingResult = service.Create(toAdd);
+
+            var result = service.Update(2, toUpdate);
+
+            Assert.IsFalse(result.Success);
+            Assert.IsTrue(result.Messages[0].Contains("date"));
+            Assert.IsNull(result.Value);
+            Assert.AreEqual(adddingResult.Value, service.ViewByHost(hostRepo.ReadAll()[0]).Value[0]);
+            Assert.AreEqual(2, service.ViewByHost(hostRepo.ReadAll()[0]).Value.Count);
+        }
+
+        [TestCase(0)]
+        [TestCase(2)]
+        public void UpdateShouldNotUpdateInvalidID(int id)
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
+
+            Host host = hostRepo.ReadAll()[0];
+            Guest guest = guestRepo.ReadAll()[0];
+            Reservation toUpdate = new Reservation
+            {
+                StartDate = new DateTime(2021, 12, 28),
+                EndDate = new DateTime(2021, 12, 29),
+                Guest = guest,
+                Host = host,
+                ID = id
+            };
+            toUpdate.SetTotal();
+
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+
+            var result = service.Update(id, toUpdate);
+
+            Assert.IsFalse(result.Success);
+            Assert.IsNull(result.Value);
+            Assert.IsTrue(result.Messages[0].Contains("ID"));
+            Assert.AreEqual(copy, service.ViewByHost(hostRepo.ReadAll()[0]).Value[0]);
+            Assert.AreEqual(1, service.ViewByHost(hostRepo.ReadAll()[0]).Value.Count);
+
+        }
+
+        [Test]
+        public void UpdateShouldAllowOverlapDatesOnResBeingUpdated()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
+
+            Host host = hostRepo.ReadAll()[0];
+            Guest guest = guestRepo.ReadAll()[0];
+
+            Reservation toUpdate = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 2),
+                EndDate = new DateTime(2022, 1, 9),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            toUpdate.SetTotal();
+            toUpdate.ID = 1;
+
+            var result = service.Update(1, toUpdate);
+
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(toUpdate, result.Value);
+            Assert.AreEqual(1, resRepo.ReadByHost(host).Count);
+        }
     }
 }

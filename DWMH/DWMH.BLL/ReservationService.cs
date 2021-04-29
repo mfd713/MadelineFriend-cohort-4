@@ -96,9 +96,34 @@ namespace DWMH.BLL
 
         }
 
-        public Result<Reservation> Update(int id)
+        public Result<Reservation> Update(int id, Reservation reservation)
         {
-            throw new System.NotImplementedException();
+
+            Result<Reservation> result = Validate(reservation);
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            //IDs must match
+            if(id != reservation.ID)
+            {
+                result.AddMessage("ID must match reservation to be updated");
+                return result;
+            }
+
+            //call repo's update function
+            result.Value = reservationRepo.Update(id, reservation);
+
+            //return result; if the Reservation was null, the ID was not found
+            if(result.Value == null)
+            {
+                result.AddMessage($"no reservation with ID {id} found");
+            }
+
+            return result;
+            
+
         }
 
         public Result<Reservation> Delete(Reservation reservation)
@@ -154,21 +179,25 @@ namespace DWMH.BLL
             if (reservation.StartDate.Ticks == 0)
             {
                 result.AddMessage("start date required");
+                return;
             }
             //must have end date
             if (reservation.EndDate.Ticks == 0)
             {
                 result.AddMessage("end date required");
+                return;
             }
             //start date must be future
             if(reservation.StartDate < DateTime.Now)
             {
                 result.AddMessage("start date must be in the future");
+                return;
             }
             //start date must be before end date
             if(reservation.StartDate >= reservation.EndDate)
             {
                 result.AddMessage("start date must be before end date");
+                return;
             }
 
             List<Reservation> fullList = reservationRepo.ReadByHost(reservation.Host);
@@ -176,23 +205,30 @@ namespace DWMH.BLL
             //check overlaps
             foreach (var existingRes in fullList)
             {
-
+                //prevents an incorrect fail in case where updating will shift to dates that would overlap with the old reservation
+                if(existingRes.ID == reservation.ID)
+                {
+                    continue;
+                }
                 //startExisting <= endNew && endNew <= endExisting
                 if (existingRes.StartDate <= reservation.EndDate && reservation.EndDate <= existingRes.EndDate)
                 { 
                     result.AddMessage("end date cannot be in the during an existing reservation");
+                    return;
                 }
 
                 //startExisting <= startNew && startNew<= endExisting
                 if (existingRes.StartDate <= reservation.StartDate && reservation.StartDate <= existingRes.EndDate)
                 {
                     result.AddMessage("start date cannot be during an existing reservation");
+                    return;
                 }
                 // startNew <= startExisting && endNew >= endExisting
-                else if
+                if
                 (reservation.StartDate <= existingRes.StartDate && reservation.EndDate >= existingRes.EndDate)
                 {
                     result.AddMessage("new reservation dates cannot contain an existing reservation");
+                    return;
                 }
             }
         }
