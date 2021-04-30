@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ninject" Version="3.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DWMH.BLL\DWMH.BLL.csproj" />
     <ProjectReference Include="..\DWMH.Core\DWMH.Core.csproj" />
     <ProjectReference Include="..\DWMH.DAL\DWMH.DAL.csproj" />

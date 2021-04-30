@@ -66,7 +66,7 @@ namespace TestsBLL
 
             Assert.IsFalse(result.Success);
             Assert.AreEqual("no reservations found for host", result.Messages[0]);
-            Assert.AreEqual(0,result.Value.Count);
+            Assert.AreEqual(0, result.Value.Count);
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace TestsBLL
             Assert.IsTrue(result.Success);
             Assert.AreEqual(guest, result.Value);
         }
-        
+
         [Test]
         public void ShouldNotFindGuestWithNoMatchingEmail()
         {
@@ -110,7 +110,7 @@ namespace TestsBLL
         //both dates before existing start
         [TestCase("2021,06,06", "2021,06,09")]
         //both dates after existing end
-        [TestCase("2022,02,02","2022,02,06")]
+        [TestCase("2022,02,02", "2022,02,06")]
 
         public void ShouldCreateValidReservation(string start, string end)
         {
@@ -171,9 +171,9 @@ namespace TestsBLL
         //startExisting <= startNew && startNew<= endExisting
         [TestCase("2022,1,3", "2022,01,12")]
         //startNew >= startExisting && endNew <= endExisting
-        [TestCase("2022, 01, 03","2022, 01, 08")]
+        [TestCase("2022, 01, 03", "2022, 01, 08")]
         // startNew <= startExisting && endNew >= endExisting
-        [TestCase("2021,12,30","2022, 01, 11")]
+        [TestCase("2021,12,30", "2022, 01, 11")]
         public void CreateShouldNotAllowInvalidReservationDates(string start, string end)
         {
             IReservationRepository resRepo = new ReservationRepoDouble();
@@ -228,7 +228,7 @@ namespace TestsBLL
 
             Assert.IsFalse(result.Success);
             Assert.IsTrue(result.Messages[0].Contains("guest"));
-            Assert.IsNull(result.Value); 
+            Assert.IsNull(result.Value);
         }
 
         [Test]
@@ -369,7 +369,7 @@ namespace TestsBLL
             ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
 
             Host host = null;
-            
+
             Reservation toChange = new Reservation
             {
                 StartDate = new DateTime(2022, 02, 03),
@@ -409,7 +409,7 @@ namespace TestsBLL
             ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
 
             Host host = hostRepo.ReadAll()[0];
-            Guest guest = null; 
+            Guest guest = null;
 
             Reservation toChange = new Reservation
             {
@@ -464,8 +464,8 @@ namespace TestsBLL
             Guest guest = guestRepo.ReadAll()[0];
             Reservation toAdd = new Reservation
             {
-                StartDate = new DateTime(2021,12,28),
-                EndDate = new DateTime(2021,12,29),
+                StartDate = new DateTime(2021, 12, 28),
+                EndDate = new DateTime(2021, 12, 29),
                 Guest = guest,
                 Host = host
             };
@@ -480,7 +480,7 @@ namespace TestsBLL
                 ID = 2
             };
 
-           var adddingResult = service.Create(toAdd);
+            var adddingResult = service.Create(toAdd);
 
             var result = service.Update(2, toUpdate);
 
@@ -562,5 +562,154 @@ namespace TestsBLL
             Assert.AreEqual(toUpdate, result.Value);
             Assert.AreEqual(1, resRepo.ReadByHost(host).Count);
         }
-    }
+
+        [Test]
+        public void DeleteShouldDelete()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
+
+            Host host = hostRepo.ReadAll()[0];
+
+            Reservation toDelete = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = host,
+                ID = 1
+            };
+
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+            var result = service.Delete(toDelete);
+
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(0,service.ViewByHost(host).Value.Count);
+            Assert.AreEqual(copy, result.Value);
+        }
+
+        [Test]
+        public void DeleteShouldNotRunForNotFoundID()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
+
+            Host host = hostRepo.ReadAll()[0];
+
+            Reservation toDelete = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = host,
+                ID = 2
+            };
+
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+            var result = service.Delete(toDelete);
+
+            Assert.IsFalse(result.Success);
+            Assert.IsNull(result.Value);
+            Assert.IsTrue(result.Messages[0].Contains("ID"));
+            Assert.AreEqual(1, service.ViewByHost(host).Value.Count);
+            Assert.AreEqual(copy, service.ViewByHost(host).Value[0]);
+        }
+        [Test]
+        public void DeleteShouldNotRunWithNullHost()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
+
+            Host host = null;
+
+            Reservation toDelete = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = host,
+                ID = 1
+            };
+
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+            var result = service.Delete(toDelete);
+
+            Assert.IsFalse(result.Success);
+            Assert.IsNull(result.Value);
+            Assert.IsTrue(result.Messages[0].Contains("Host"));
+
+        }
+
+        [Test]
+        public void DeleteShouldNotWorkForPast()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            ReservationService service = new ReservationService(resRepo, guestRepo, hostRepo);
+
+            Host host = hostRepo.ReadAll()[0];
+
+            Reservation toDelete = new Reservation
+            {
+                StartDate = new DateTime(2020, 1, 1),
+                EndDate = new DateTime(2020, 1, 8),
+                Host = host,
+                ID = 1
+
+            };
+
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+            var result = service.Delete(toDelete);
+
+            Assert.IsFalse(result.Success);
+            Assert.IsNull(result.Value);
+            Assert.IsTrue(result.Messages[0].Contains("past"));
+            Assert.AreEqual(1, service.ViewByHost(host).Value.Count);
+            Assert.AreEqual(copy, service.ViewByHost(host).Value[0]);
+        }
+   }         
 }

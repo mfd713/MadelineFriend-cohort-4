@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DWMH.Core;
+using DWMH.Core.Loggers;
 using DWMH.Core.Exceptions;
 using DWMH.Core.Repos;
 using System.IO;
@@ -14,10 +15,12 @@ namespace DWMH.DAL
     {
         const string HEADER = "id,start_date,end_date,guest_id,total";
         private string directory;
+        private ILogger logger;
 
-        public ReservationFileRepository(string directory)
+        public ReservationFileRepository(string directory, ILogger logger)
         {
             this.directory = directory;
+            this.logger = logger;
         }
 
         public Reservation Create(Reservation reservation)
@@ -38,7 +41,17 @@ namespace DWMH.DAL
 
         public Reservation Delete(Reservation reservation)
         {
-            throw new NotImplementedException();
+            List<Reservation> reservations = ReadByHost(reservation.Host);//note that this needs a full host!
+            Reservation result;
+
+            result = reservations.Where(r => r.ID == reservation.ID).FirstOrDefault();
+            if (result != null)
+            {
+                reservations.Remove(result);
+                Write(reservations, reservation.Host.ID);
+            }
+
+            return result;
         }
 
         public List<Reservation> ReadByHost(Host host)
@@ -58,6 +71,7 @@ namespace DWMH.DAL
             }
             catch (IOException e)
             {
+                logger.Log(e);
                 throw new RepositoryException("could not read reservations", e);
             }
 
@@ -121,6 +135,7 @@ namespace DWMH.DAL
             }
             catch (IOException e)
             {
+                logger.Log(e);
                 throw new RepositoryException("could not write reservations", e);
             }
         }

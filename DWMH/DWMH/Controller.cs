@@ -42,16 +42,69 @@ namespace DWMH
                     case 4:
                         Cancel();
                         ConsoleIO.AnyKeyToContinue();
-                        break
-                    default:
                         break;
+                    default:
+                        ConsoleIO.DisplayLine("You chose to exit");
+                        if (ConsoleIO.PromptYesNo())
+                        {
+                            ConsoleIO.DisplayLine("Goodbye!");
+                            return;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        
                 }
             } while (true);
         }
 
         private void Cancel()
         {
+            ConsoleIO.DisplayLine("*** Cancel Reservation ***");
+
+            //get host list and reservations
             //when getting list to show, query to only show future dates
+            Result<List<Reservation>> reservationsResult = GetReservations();
+
+            List<Reservation> orderedReservations = reservationsResult.Value
+                .Where(r => r.StartDate > DateTime.Now)
+                .ToList();
+
+            ConsoleIO.DisplayStatus(reservationsResult.Success, reservationsResult.Messages);
+            if (reservationsResult.Success)
+            {
+                ConsoleIO.DisplayReservationList(orderedReservations);
+            }
+            else
+            {
+                return;
+            }
+
+            //get id to delete
+            Reservation toDelete = null;
+            do
+            {
+                int idToDelete = ConsoleIO.PromptInt("Enter the ID of the Reservation you want to cancel");
+                toDelete = reservationsResult.Value.Find(r => r.ID == idToDelete);
+            } while (toDelete == null);
+
+            //confirm deletion
+            ConsoleIO.DisplayLine($"\nCancelling reservation {toDelete.ID}");
+            if (!ConsoleIO.PromptYesNo())
+            {
+                ConsoleIO.DisplayLine("Reservation was not deleted");
+                return;
+            }
+
+            //perform Delete and show result
+            var result = reservationService.Delete(toDelete);
+
+            ConsoleIO.DisplayStatus(result.Success, result.Messages);
+            if (result.Success)
+            {
+                ConsoleIO.DisplayLine($"Reservation with ID {result.Value.ID} was deleted");
+            }
         }
 
         private void Update()
@@ -215,5 +268,6 @@ namespace DWMH
             Result<List<Reservation>> result = reservationService.ViewByHost(host);
             return result;
         }
+
     }
 }

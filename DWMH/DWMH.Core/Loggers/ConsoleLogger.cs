@@ -11,8 +11,8 @@ namespace DWMH.Core.Loggers
         public void Log(Exception e)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(e.Message);
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("Critical Error\n"+e.Message);
+            Console.ResetColor();
         }
     }
 }

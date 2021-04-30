@@ -7,16 +7,19 @@ using System.Threading.Tasks;
 using DWMH.Core;
 using DWMH.Core.Exceptions;
 using DWMH.Core.Repos;
+using DWMH.Core.Loggers;
 
 namespace DWMH.DAL
 {
     public class HostFileRepository : IHostRepository
     {
         private string filePath;
+        ILogger logger;
 
-        public HostFileRepository(string file)
+        public HostFileRepository(string file, ILogger logger)
         {
             filePath = file;
+            this.logger = logger;
         }
         public List<Host> ReadAll()
         {
@@ -34,6 +37,7 @@ namespace DWMH.DAL
             }
             catch (IOException e)
             {
+                logger.Log(e);
                 throw new RepositoryException("could not read hosts", e);
             }
 
@@ -62,7 +66,7 @@ namespace DWMH.DAL
 
         public Host ReadByEmail(string email)
         {
-            throw new NotImplementedException();
+            return ReadAll().Where(h => h.Email == email).FirstOrDefault();
         }
     }
 }

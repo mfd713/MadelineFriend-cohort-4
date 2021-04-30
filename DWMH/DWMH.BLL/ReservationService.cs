@@ -128,7 +128,32 @@ namespace DWMH.BLL
 
         public Result<Reservation> Delete(Reservation reservation)
         {
-            throw new System.NotImplementedException();
+            //create result
+            Result<Reservation> result = new Result<Reservation>();
+
+            //host cannot be null
+            if(reservation.Host == null)
+            {
+                result.AddMessage("Host cannot be null");
+                return result;
+            }
+            //dates cannot be past
+            if(reservation.StartDate < DateTime.Now || reservation.EndDate < DateTime.Now)
+            {
+                result.AddMessage("Cannot cancel past reservation");
+                return result;
+            }
+            //run delete on repo
+            //result takes in value
+            result.Value = reservationRepo.Delete(reservation);
+
+            //if value null, add ID issue to messages list
+            if (result.Value == null)
+            {
+                result.AddMessage($"result with ID {reservation.ID} not found");
+            }
+
+            return result;
         }
 
         private Result<Reservation> Validate(Reservation reservation)

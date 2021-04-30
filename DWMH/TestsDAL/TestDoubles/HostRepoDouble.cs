@@ -33,7 +33,7 @@ namespace TestsDAL.TestDoubles
 
         public Host ReadByEmail(string email)
         {
-            throw new NotImplementedException();
+            return ReadAll().Where(h => h.Email == email).FirstOrDefault();
         }
     }
 }

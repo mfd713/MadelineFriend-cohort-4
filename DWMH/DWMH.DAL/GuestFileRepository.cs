@@ -7,16 +7,19 @@ using DWMH.Core;
 using DWMH.Core.Repos;
 using System.IO;
 using DWMH.Core.Exceptions;
+using DWMH.Core.Loggers;
 
 namespace DWMH.DAL
 {
     public class GuestFileRepository : IGuestRepository
     {
         private readonly string filePath;
+        private ILogger logger;
         
-        public GuestFileRepository(string file)
+        public GuestFileRepository(string file, ILogger logger)
         {
             filePath = file;
+            this.logger = logger;
         }
 
         public List<Guest> ReadAll()
@@ -35,6 +38,7 @@ namespace DWMH.DAL
             }
             catch(IOException e)
             {
+                logger.Log(e);
                 throw new RepositoryException("could not read guests", e);
             }
 

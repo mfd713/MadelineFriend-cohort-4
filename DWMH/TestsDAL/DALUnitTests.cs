@@ -1,9 +1,13 @@
 using NUnit.Framework;
 using DWMH.Core;
 using DWMH.Core.Repos;
+using DWMH.Core.Exceptions;
 using TestsDAL.TestDoubles;
 using System.Collections.Generic;
 using System;
+using System.IO;
+using DWMH.DAL;
+using DWMH.Core.Loggers;
 
 namespace TestsDAL
 {
@@ -182,6 +186,131 @@ namespace TestsDAL
             Assert.IsNull(result);
             Assert.AreEqual(resRepo.ReadByHost(hostRepo.ReadAll()[0])[0], copy);
             Assert.AreEqual(1, resRepo.ReadByHost(hostRepo.ReadAll()[0]).Count);
+        }
+
+        [Test]
+        public void DeleteShouldDelete()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            Reservation toDelete = new Reservation
+            {
+                ID = 1
+            };
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+            var result = resRepo.Delete(toDelete);
+
+            Assert.AreEqual(0, resRepo.ReadByHost(hostRepo.ReadByEmail("none@no.com")).Count);
+            Assert.AreEqual(copy, result);
+        }
+
+        [Test]
+        public void DeleteShouldNotHappenWhenIDNotFound()
+        {
+            IReservationRepository resRepo = new ReservationRepoDouble();
+            IHostRepository hostRepo = new HostRepoDouble();
+            IGuestRepository guestRepo = new GuestRepoDouble();
+
+            Reservation toDelete = new Reservation
+            {
+                ID = 2
+            };
+            Reservation copy = new Reservation
+            {
+                StartDate = new DateTime(2022, 1, 1),
+                EndDate = new DateTime(2022, 1, 8),
+                Host = hostRepo.ReadAll()[0],
+                Guest = guestRepo.ReadAll()[0]
+            };
+            copy.SetTotal();
+            copy.ID = 1;
+
+            var result = resRepo.Delete(toDelete);
+
+            Assert.AreEqual(1, resRepo.ReadByHost(hostRepo.ReadByEmail("test1@gmail.com")).Count);
+            Assert.AreEqual(copy, resRepo.ReadByHost(hostRepo.ReadByEmail("test1@gmail.com"))[0]);
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void ReadReservationUnavailableFileShouldThrowException()
+        {
+            string filePath = "test";
+            IReservationRepository repo = new ReservationFileRepository(filePath, new NullLogger());
+
+           FileStream stream = File.Open(filePath + "\\reservations.csv",FileMode.Open);
+            try
+            { 
+                repo.Create(new Reservation { Host = new Host { ID= "reservations"} });
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(typeof(RepositoryException), e.GetType());
+                Assert.AreEqual("could not read reservations", e.Message);
+            }
+            finally
+            {
+                stream.Close();
+            }
+
+        }
+
+        [Test]
+        public void ReadingUnavailableGuestFileShouldThrowException()
+        {
+            string filePath = "test\\guests.csv";
+            IGuestRepository repo = new GuestFileRepository(filePath, new NullLogger());
+
+            FileStream stream = File.Open(filePath, FileMode.Open);
+            try
+            {
+                repo.ReadAll();
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(typeof(RepositoryException), e.GetType());
+                Assert.AreEqual("could not read guests", e.Message);
+            }
+            finally
+            {
+                stream.Close();
+            }
+        }
+
+        [Test]
+        public void ReadingUnavailalbleHostFileShouldThrowException()
+        {
+            string filePath = "test\\hosts.csv";
+            IHostRepository repo = new HostFileRepository(filePath, new NullLogger());
+
+            FileStream stream = File.Open(filePath, FileMode.Open);
+            try
+            {
+                repo.ReadAll();
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(typeof(RepositoryException), e.GetType());
+                Assert.AreEqual("could not read hosts", e.Message);
+            }
+            finally
+            {
+                stream.Close();
+            }
         }
     }
 }

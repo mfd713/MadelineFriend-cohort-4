@@ -63,7 +63,15 @@ namespace TestsDAL.TestDoubles
 
         public Reservation Delete(Reservation reservation)
         {
-            throw new NotImplementedException();
+            Reservation result;
+
+            result = _reservations.Where(r => r.ID == reservation.ID).FirstOrDefault();
+            if(result != null)
+            {
+                _reservations.Remove(result);
+            }
+
+            return result;
         }
 
         public List<Reservation> ReadByHost(Host host)
