@@ -1,6 +1,4 @@
-﻿using DWMH.Core;
-using DWMH.BLL;
-using Ninject;
+﻿using Ninject;
 
 namespace DWMH
 {
