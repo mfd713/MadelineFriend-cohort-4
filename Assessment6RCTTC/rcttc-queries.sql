@@ -1,3 +1,5 @@
+use RCTTC;
+
 SELECT* From Performance Where ShowDate BETWEEN '2021-10-01' AND '2021-12-31';
 
 SELECT * from Customer;
