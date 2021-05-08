@@ -37,7 +37,7 @@ create TABLE Performance(
 
 create TABLE Ticket(
   TicketId int PRIMARY key IDENTITY(1,1),
-  Price DECIMAL not null,
+  Price DECIMAL(9,2) not null,
   ShowTitle VARCHAR(100) not null,
   ShowDate date not null,
   TheaterId int not null,
