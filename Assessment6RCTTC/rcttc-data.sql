@@ -55,12 +55,26 @@ GROUP by ShowTitle, ShowDate, CustomerId
 Having Count(Seat) =1;
 
 begin tran
-delete from Ticket where (CustomerId in (105,83,97,122) AND ShowTitle = 'Send in the Clowns')
-delete from Ticket where (CustomerId = 86 AND ShowTitle = 'Tell Me What To Think')
-delete from Ticket where (CustomerId in (93,101,120,127) AND ShowTitle = 'The Dress')
+delete from Ticket where (CustomerId in (SELECT CustomerId
+From Ticket t1
+Where TheaterId = 1
+GROUP by CustomerId
+Having Count(Seat) =1) AND ShowTitle = 'Send in the Clowns')
+
+delete from Ticket where (CustomerId in (SELECT CustomerId
+From Ticket t1
+Where TheaterId = 1
+GROUP by CustomerId
+Having Count(Seat) =1) AND ShowTitle = 'Tell Me What To Think')
+
+delete from Ticket where (CustomerId in (SELECT CustomerId
+From Ticket t1
+Where TheaterId = 1
+GROUP by CustomerId
+Having Count(Seat) =1) AND ShowTitle = 'The Dress')
 commit
 
 begin tran
-delete from Ticket Where CustomerId = 119;
-delete from customer where CustomerId = 119;
+delete from Ticket Where CustomerId = (SELECT CustomerID FROM Customer Where LastName = 'Egle of Germany');
+delete from Customer where LastName = 'Egle of Germany';
 commit
