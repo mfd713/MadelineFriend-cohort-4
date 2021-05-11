@@ -14,7 +14,7 @@ namespace AdoDemo
             employee.FirstName = PromptUser("Enter a first name");
             employee.LastName = PromptUser("Enter a last name");
             employee.StartDate = PromptUserDate("Enter start Date");
-            employee.EndDate = PromptUserDate("Enter start Date");
+            employee.EndDate = PromptUserDate("Enter end Date");
             return employee;
         }
 

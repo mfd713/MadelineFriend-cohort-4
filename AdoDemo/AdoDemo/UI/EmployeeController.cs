@@ -33,8 +33,13 @@ namespace AdoDemo
                         _employeeRepository.CreateEmployee(employee);
                         break;
                     case 3:
+                        Employee toUpdate = ConsoleIO.PromptUserEmployee();
+                        toUpdate.EmployeeId = ConsoleIO.PromptUserInt("Enter ID of employee you want to update: ");
+                        _employeeRepository.Update(toUpdate);
                         break;
                     case 4:
+                        int ToDelete = ConsoleIO.PromptUserInt("Enter ID of employee you want to delete: ");
+                        _employeeRepository.Delete(ToDelete);
                         break;
                     case 5:
                         return;

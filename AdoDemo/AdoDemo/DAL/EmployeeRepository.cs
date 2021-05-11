@@ -32,6 +32,7 @@ namespace AdoDemo
                 }
                 catch (SqlException ex)
                 {
+                    Console.WriteLine("Error!" + ex.Message);
 
                 }
             }
@@ -40,7 +41,24 @@ namespace AdoDemo
 
         public void Delete(int employeeId)
         {
-            throw new NotImplementedException();
+            using(SqlConnection conn = new SqlConnection(_sqlConnectionString))
+            {
+                string deleteSQL = @"DELETE FROM Employee " +
+                    "WHERE EmployeeId = @ID";
+
+                try
+                {
+                    conn.Open();
+                    SqlCommand command = new SqlCommand(deleteSQL, conn);
+                    command.Parameters.AddWithValue("@ID", employeeId);
+
+                    command.ExecuteNonQuery();
+                }
+                catch (SqlException ex) 
+                {
+                    Console.WriteLine("Error!" + ex.Message);
+                }
+            }
         }
 
         public List<Employee> ReadAll()
@@ -87,7 +105,37 @@ namespace AdoDemo
 
         public void Update(Employee employee)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(_sqlConnectionString))
+            {
+                var employeeUpdateSQL = @"UPDATE Employee "+
+                    "SET FirstName = @FirstName, LastName = @LastName, StartDate = @StartDate, EndDate = @EndDate " +
+                    "WHERE EmployeeID = @ID;";
+                try
+                {
+                    conn.Open();
+                    var command = new SqlCommand(employeeUpdateSQL, conn);
+                    command.Parameters.AddWithValue("@FirstName", employee.FirstName);
+                    command.Parameters.AddWithValue("@LastName", employee.LastName);
+                    command.Parameters.AddWithValue("@StartDate", employee.StartDate);
+                    command.Parameters.AddWithValue("@EndDate", employee.EndDate);
+                    command.Parameters.AddWithValue("@ID", employee.EmployeeId);
+
+                    command.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine("Error!" + ex.Message);
+                }
+                finally
+                {
+                    if (conn != null && conn.State == System.Data.ConnectionState.Open)
+                    {
+                        conn.Close();
+                    }
+                }
+            }
         }
     }
 }
