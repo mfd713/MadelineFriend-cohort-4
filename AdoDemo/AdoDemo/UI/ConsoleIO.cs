@@ -18,6 +18,20 @@ namespace AdoDemo
             return employee;
         }
 
+        public static Customer PromptUserCustomer()
+        {
+            Customer customer = new Customer();
+            customer.FirstName = PromptUser("Enter a first name");
+            customer.LastName = PromptUser("Enter a last name");
+            customer.Email = PromptUser("Enter email");
+            customer.Phone = PromptUser("Enter phone");
+            customer.Address = PromptUser("Enter address");
+            customer.City = PromptUser("Enter city");
+            customer.Province = PromptUser("Enter province");
+            customer.PostalCode = PromptUser("Enter postal code");
+            customer.CustomerSince = PromptUserDate("Enter customer since date");
+            return customer;
+        }
         public static DateTime PromptUserDate(string message)
         {
             DateTime result;

@@ -44,7 +44,7 @@ namespace AdoDemo
             using(SqlConnection conn = new SqlConnection(_sqlConnectionString))
             {
                 string deleteSQL = @"DELETE FROM Employee " +
-                    "WHERE EmployeeId = @ID";
+                    @"WHERE EmployeeId = @ID";
 
                 try
                 {
