@@ -136,7 +136,6 @@ namespace FAtests
             agentRepo.Insert(testAgent);
             Agent toUpdate = new Agent
             {
-               
                 AgentId = 2
             };
 
