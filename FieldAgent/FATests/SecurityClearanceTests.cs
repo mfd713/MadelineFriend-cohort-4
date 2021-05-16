@@ -1,11 +1,9 @@
 ﻿using FieldAgent.DAL;
 using NUnit.Framework;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using FieldAgent.Entities;
 using FieldAgent;
 using System.Collections.Generic;
-using System;
 
 namespace FAtests
 {
@@ -14,28 +12,10 @@ namespace FAtests
         private FieldAgentsDbContext context;
         private SecurityClearanceEFRepo securityRepo;
 
-        private static FieldAgentsDbContext GetDbContext()
-        {
-            var builder = new ConfigurationBuilder();
-
-            builder.AddUserSecrets<FieldAgentsDbContext>();
-
-            var config = builder.Build();
-
-            var connectionString = config["ConnectionStrings:FieldAgent"];
-
-            var options = new DbContextOptionsBuilder<FieldAgentsDbContext>()
-                .UseSqlServer(connectionString)
-                .Options;
-
-            return new FieldAgentsDbContext(options);
-
-        }
-
         [SetUp]
         public void Setup()
         {
-            context = GetDbContext();
+            context = FieldAgentsDbContext.GetDbContext();
 
             securityRepo = new SecurityClearanceEFRepo(context);
         }
