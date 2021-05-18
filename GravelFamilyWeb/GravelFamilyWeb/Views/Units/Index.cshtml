@@ -1,0 +1,34 @@
+﻿@model IEnumerable<GravelFamily.DAL.Unit>
+
+@{ 
+    ViewData["Title"] = "Index";
+} 
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                UnitId
+            </th>
+            <th>
+                Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(m => item.UnitId)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.Name)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
