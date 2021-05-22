@@ -1,1 +1,59 @@
-﻿
+﻿@model FieldAgent.Entities.Agency
+@{
+    ViewBag.Title = "Report List";
+    var agencies = new SelectList(ViewBag.ListOfAgencies, "AgencyId", "ShortName");
+    List<FieldAgent.Entities.SecurityClearance> clearances = ViewBag.ListOfClearances;
+}
+<h1>Report List</h1>
+<div class="row">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Report Name</th>
+                <th>Description</th>
+                <th>Get Report For...</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Top Agents</td>
+                <td>The top 3 agents by number of Missions completed</td>
+                <td><a asp-action="ViewTopAgents">All Agents</a></td>
+            </tr>
+            <tr>
+                <td>Pension List</td>
+                <td>List of retired agents for selected Agency</td>
+                <td>
+                    @foreach (var agency in agencies)
+                    {
+                        <a asp-action="ViewPensionList" asp-route-id="@agency.Value">@agency.Text</a>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>Security Clerance Audit</td>
+                <td>List of agents with a given security clearance for a selected Agency</td>
+                <td>
+                    @foreach (var agency in agencies)
+                    {
+                        <p>
+                            @agency.Text:
+                        @foreach (var sc in clearances)
+                        {
+                            <a asp-action="ViewSecurityAudit" asp-route-agencyId="@agency.Value" asp-route-clearanceId="@sc.SecurityClearanceId">@sc.SecurityClearanceName</a> |
+                        }
+                    </p>
+                }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="text-muted">* does not apply to some reports</p>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

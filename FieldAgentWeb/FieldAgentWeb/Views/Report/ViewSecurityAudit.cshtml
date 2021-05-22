@@ -1,5 +1,42 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<FieldAgent.DTOs.ClearanceAuditListItem>
 @{
+    ViewBag.Title = "Security Audit";
 }
+<h1>Security Audit List</h1>
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Badge ID</th>
+                <th>DOB</th>
+                <th>Activation Date</th>
+                <th>Deactivation Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var agent in Model)
+            {
+                <tr>
+                    <td>@agent.NameLastFirst.Replace(",", ", ")</td>
+                    <td>@agent.BadgeId</td>
+                    <td>
+                        @agent.DateOfBirth.ToShortDateString()
+                    </td>
+                    <td>@agent.ActivationDate.ToShortDateString()</td>
+                    @if (agent.DeactivationDate == null)
+                    {
+
+
+                        <td>N/A</td>
+                    }
+                    else
+                    {
+                        <td>@agent.DeactivationDate.Value.ToShortDateString()</td>
+                    }
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

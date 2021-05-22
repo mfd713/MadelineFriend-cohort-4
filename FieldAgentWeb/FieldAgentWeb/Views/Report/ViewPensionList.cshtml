@@ -1,5 +1,31 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<FieldAgent.DTOs.PensionListItem>
 @{
+    ViewBag.Title = "Pension List";
 }
+<h1>Pension List for @Model[0].AgencyName</h1>
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Badge ID</th>
+                <th>DOB</th>
+                <th>Deactivation Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var agent in Model)
+            {
+                <tr>
+                    <td>@agent.NameLastFirst.Replace(",", ", ")</td>
+                    <td>@agent.BadgeId</td>
+                    <td>
+                        @agent.DateOfBirth.ToShortDateString()
+                    </td>
+                    <td>@agent.DeactivationDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Index">Back to Reports</a>
+</div>

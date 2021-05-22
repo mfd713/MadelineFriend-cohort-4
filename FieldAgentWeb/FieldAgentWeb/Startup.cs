@@ -29,8 +29,11 @@ namespace FieldAgentWeb
             services.AddControllersWithViews();
             services.AddDbContext<FieldAgentsDbContext>(options
                 => options.UseSqlServer(Configuration.GetConnectionString("FieldAgent")));
+           
 
-            services.AddTransient<IAgencyRepository, IAgencyRepo>();
+            services.AddTransient<IAgencyRepository, AgencyEFRepo>();
+            services.AddTransient<ISecurityClearanceRepository, SecurityClearanceEFRepo>();
+            services.AddTransient<IReportsRepository>(factory => new ReportsADORepository(Configuration.GetConnectionString("FieldAgent")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
