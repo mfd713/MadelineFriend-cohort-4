@@ -1,0 +1,41 @@
+﻿@model List<FieldAgent.Entities.Agency>
+@{
+    ViewBag.Title = "Agency List";
+}
+<h1>Agency List</h1>
+@*<div class="row">
+    <a asp-controller="Building" asp-action="Add">Add New Building</a>
+</div>*@
+<div class="row">
+    <p><a asp-action="Add">Create new Agency</a></p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Short Name</th>
+                <th>Long Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var agency in Model)
+            {
+            <tr>
+                <td>@agency.AgencyId</td>
+                <td>@agency.ShortName</td>
+                <td>@agency.LongName</td>
+                <td>
+                    <a asp-controller="Agency" asp-action="Details" asp-route-id="@agency.AgencyId">Details</a> |
+                    <a asp-controller="Agency" asp-action="Edit" asp-route-id="@agency.AgencyId">Edit</a> |
+                    <a asp-controller="Agency" asp-action="Delete" asp-route-id="@agency.AgencyId">Delete</a> 
+                </td>
+                
+                @*<td><a asp-controller="Agency" asp-action="Get" asp-route-id="@building.BuildingID">@building.BuildingID</a></td>
+        <td><a asp-controller="Agenct" asp-action="GetRooms" asp-route-id="@building.BuildingID">@building.BuildingName</a></td>
+        <td><a asp-action="Edit" asp-controller="Building" asp-route-id="@building.BuildingID">Edit</a></td>
+        <td><a asp-action="Remove" asp-controller="Building" asp-route-id="@building.BuildingID">Delete</a></td>*@
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

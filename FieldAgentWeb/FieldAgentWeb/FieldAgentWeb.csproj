@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>7acb0b3f-7dc0-4ad8-bf5b-82be9ffef544</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FieldAgent\FieldAgent.DAL\FieldAgent.DAL.csproj" />
+    <ProjectReference Include="..\..\FieldAgent\FieldAgent\FieldAgent.Core.csproj" />
+  </ItemGroup>
+
+</Project>

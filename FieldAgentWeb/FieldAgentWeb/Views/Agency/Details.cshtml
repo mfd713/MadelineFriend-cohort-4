@@ -1,0 +1,23 @@
+﻿@model FieldAgent.Entities.Agency
+
+<h1>Agency Information</h1>
+<div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-4">
+        <form>
+            <fieldset disabled>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="AgencyId">Id</label>
+                    <input type="text" class="form-control" id="AgencyId" asp-for="AgencyId">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ShortName" class="form-label">Short Name</label>
+                    <input type="text" class="form-control" id="ShortName" asp-for="ShortName">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="LongName" class="form-label">Long Name</label>
+                    <input type="text" class="form-control" id="LongName" asp-for="LongName">
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

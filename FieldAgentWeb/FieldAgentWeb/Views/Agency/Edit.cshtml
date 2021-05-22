@@ -1,0 +1,30 @@
+﻿@model FieldAgent.Entities.Agency
+
+<h1>Edit Agency</h1>
+<div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-4">
+        <form asp-controller="Agency" asp-action="Edit" asp-route-id="@Model.AgencyId" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AgencyId" />
+            <div class="mb-3">
+                <label asp-for="ShortName" class="form-label">ShortName</label>
+                <input type="text" class="form-control" id="ShortName" asp-for="ShortName">
+                <span asp-validation-for="ShortName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="LongName" class="form-label">LongName</label>
+                <input type="text" class="form-control" id="LongName" asp-for="LongName">
+                <span asp-validation-for="LongName" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to Agency list</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

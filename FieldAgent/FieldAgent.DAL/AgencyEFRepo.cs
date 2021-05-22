@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FieldAgent.DAL
 {
-    public class AgencyEFRepo : IAgencyRepository
+    public class IAgencyRepo : IAgencyRepository
     {
         private FieldAgentsDbContext context;
 
-        public AgencyEFRepo(FieldAgentsDbContext context)
+        public IAgencyRepo(FieldAgentsDbContext context)
         {
             this.context = context;
         }
