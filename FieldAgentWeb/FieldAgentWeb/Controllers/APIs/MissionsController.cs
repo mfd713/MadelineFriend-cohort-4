@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FieldAgentWeb.Models;
 using FieldAgent.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FieldAgentWeb.Controllers.APIs
 {
@@ -22,7 +23,7 @@ namespace FieldAgentWeb.Controllers.APIs
         }
 
         [Route("{id}", Name ="GetMission")]
-        [HttpGet]
+        [HttpGet, Authorize]
         public IActionResult GetMission(int id)
         {
             var response = missionRepo.Get(id);
@@ -48,7 +49,7 @@ namespace FieldAgentWeb.Controllers.APIs
         }
 
         [Route("agencies/{id}")]
-        [HttpGet]
+        [HttpGet, Authorize]
         public IActionResult GetByAgency(int id)
         {
             var response = missionRepo.GetByAgency(id);
@@ -81,7 +82,7 @@ namespace FieldAgentWeb.Controllers.APIs
         }
 
         [Route("agents/{id}")]
-        [HttpGet]
+        [HttpGet, Authorize]
         public IActionResult GetbyAgent(int id)
         {
             var response = missionRepo.GetByAgent(id);
@@ -112,7 +113,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public IActionResult Create(Mission mission)
         {
             var response = missionRepo.Insert(mission);
@@ -127,7 +128,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpPut]
+        [HttpPut, Authorize]
         [Route("{id}")]
         public IActionResult Edit(Mission mission, int id)
         {
@@ -163,7 +164,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpDelete]
+        [HttpDelete, Authorize]
         [Route("{id}")]
         public IActionResult Delete(int id)
         {

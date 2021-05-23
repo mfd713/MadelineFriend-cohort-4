@@ -1,6 +1,7 @@
 ﻿using FieldAgent.Entities;
 using FieldAgent.Interfaces;
 using FieldAgentWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,7 +22,7 @@ namespace FieldAgentWeb.Controllers.APIs
             this.aliasRepo = aliasRepo;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         [Route("{id}", Name = "GetAlias")]
         public IActionResult GetAlias(int id)
         {
@@ -43,7 +44,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         [Route("agents/{id}")]
         public IActionResult GetByAgent(int id)
         {
@@ -72,7 +73,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public IActionResult Create(Alias alias)
         {
             var response = aliasRepo.Insert(alias);
@@ -87,7 +88,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpPut]
+        [HttpPut, Authorize]
         [Route("{id}")]
         public IActionResult Edit(Alias alias, int id)
         {
@@ -120,7 +121,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpDelete]
+        [HttpDelete, Authorize]
         [Route("{id}")]
         public IActionResult Delete(int id)
         {

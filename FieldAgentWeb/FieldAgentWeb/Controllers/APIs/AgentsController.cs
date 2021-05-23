@@ -1,6 +1,7 @@
 ﻿using FieldAgent.Entities;
 using FieldAgent.Interfaces;
 using FieldAgentWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,7 +22,7 @@ namespace FieldAgentWeb.Controllers.APIs
             this.agentRepository = agentRepository;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         [Route("{id}", Name = "GetAgent")]
         public IActionResult GetAgent(int id)
         {
@@ -37,7 +38,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public IActionResult Create(Agent agent)
         {
             var response = agentRepository.Insert(agent);
@@ -52,7 +53,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         [Route("{id}/missions")]
         public IActionResult GetMissions(int id)
         {
@@ -84,7 +85,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpPut]
+        [HttpPut, Authorize]
         [Route("{id}")]
         public IActionResult Edit(Agent agent, int id)
         {
@@ -117,7 +118,7 @@ namespace FieldAgentWeb.Controllers.APIs
             }
         }
 
-        [HttpDelete]
+        [HttpDelete, Authorize]
         [Route("{id}")]
         public IActionResult Delete(int id)
         {
