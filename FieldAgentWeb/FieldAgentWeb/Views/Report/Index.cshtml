@@ -41,7 +41,7 @@
                             @agency.Text:
                         @foreach (var sc in clearances)
                         {
-                            <a asp-action="ViewSecurityAudit" asp-route-agencyId="@agency.Value" asp-route-clearanceId="@sc.SecurityClearanceId">@sc.SecurityClearanceName</a> |
+                            <a asp-action="ViewSecurityAudit" asp-route-agencyId="@agency.Value" asp-route-clearanceId="@sc.SecurityClearanceId">@sc.SecurityClearanceName</a> 
                         }
                     </p>
                 }

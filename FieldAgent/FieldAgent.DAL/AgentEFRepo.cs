@@ -50,9 +50,11 @@ namespace FieldAgent.DAL
             Response<List<Mission>> response = new Response<List<Mission>>();
 
             response.Data = context.Agent
-                .Find(agentId).Missions;
+                .Include(a => a.Missions)
+                .Where(a => a.AgentId == agentId)
+                .FirstOrDefault().Missions;
 
-            response.Success = response.Data.Count > 0;
+            response.Success = response.Data != null && response.Data.Count > 0;
             if (!response.Success)
             {
                 response.Message += "No Missions found";
