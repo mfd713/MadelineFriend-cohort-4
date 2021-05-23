@@ -59,6 +59,7 @@ namespace FieldAgent.DAL
             try
             {
                 response.Data = context.Alias
+                    .Include(a=>a.Agent)
                     .Where(a => a.AgentId == agentId)
                     .ToList();
                 response.Success = response.Data.Count > 0;

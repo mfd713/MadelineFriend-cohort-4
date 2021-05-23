@@ -1,26 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace FieldAgent.Entities
+namespace FieldAgentWeb.Models
 {
-    public class Alias
+    public class AgentAliasesModel
     {
         public int AliasId { get; set; }
-
-        [Required]
         public string AliasName { get; set; }
-
-        [StringLength(36)]
         public string InterpolId { get; set; }
-
         public string Persona { get; set; }
-
-        [Required]
         public int AgentId { get; set; }
-        public Agent Agent { get; set; }
+        public string AgentName { get; set; }
     }
 }

@@ -49,6 +49,7 @@ namespace FieldAgent.DAL
             Response<List<Mission>> response = new Response<List<Mission>>();
 
             response.Data = context.Mission
+                .Include(m=>m.Agency)
                 .Where(m => m.AgencyId == agencyId)
                 .ToList();
 
@@ -67,8 +68,9 @@ namespace FieldAgent.DAL
             try
             {
                 response.Data = context.Agent
-                .Find(agentId)
-                .Missions;
+               .Include(a => a.Missions)
+               .Where(a => a.AgentId == agentId)
+               .FirstOrDefault().Missions;
             }
             catch
             {

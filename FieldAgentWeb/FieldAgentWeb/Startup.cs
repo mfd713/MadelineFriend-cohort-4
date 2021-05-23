@@ -36,6 +36,8 @@ namespace FieldAgentWeb
             services.AddTransient<ISecurityClearanceRepository, SecurityClearanceEFRepo>();
             services.AddTransient<IAgentRepository, AgentEFRepo>();
             services.AddTransient<IReportsRepository>(factory => new ReportsADORepository(Configuration.GetConnectionString("FieldAgent")));
+            services.AddTransient<IMissionRepository, MissionEFRepo>();
+            services.AddTransient<IAliasRepository, AliasEFRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

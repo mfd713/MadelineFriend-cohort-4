@@ -22,8 +22,8 @@ namespace FieldAgentWeb.Controllers.APIs
         }
 
         [HttpGet]
-        [Route("{id}", Name = "Get")]
-        public IActionResult Get(int id)
+        [Route("{id}", Name = "GetAgent")]
+        public IActionResult GetAgent(int id)
         {
             var response = agentRepository.Get(id);
 
@@ -44,7 +44,7 @@ namespace FieldAgentWeb.Controllers.APIs
 
             if (response.Success)
             {
-                return CreatedAtRoute(nameof(Get), new { id = response.Data.AgentId }, agent);
+                return CreatedAtRoute(nameof(GetAgent), new { id = response.Data.AgentId }, agent);
             }
             else
             {
