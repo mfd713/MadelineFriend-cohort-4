@@ -2,6 +2,11 @@
 @{
     ViewBag.Title = "Security Audit";
 }
+
+@if (Model.Count == 0)
+{
+    <p class="text-danger">No agents at this agency have the selected clearance</p>
+}
 <h1>Security Audit List</h1>
 <div class="row">
     <table class="table table-striped">
@@ -39,4 +44,6 @@
             }
         </tbody>
     </table>
+    <a asp-action="Index">Back to Reports</a>
+
 </div>

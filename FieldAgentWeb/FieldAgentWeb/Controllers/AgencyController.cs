@@ -1,4 +1,5 @@
-﻿using FieldAgent.DAL;
+﻿using FieldAgent;
+using FieldAgent.DAL;
 using FieldAgent.Entities;
 using FieldAgent.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace FieldAgentWeb.Controllers
             }
             else
             {
-                throw new Exception(response.Message);
+                return BadRequest(response.Message);
             }
         }
 
@@ -44,7 +45,7 @@ namespace FieldAgentWeb.Controllers
             }
             else
             {
-                throw new Exception(response.Message);
+                return BadRequest(response.Message);
             }
         }
 
@@ -68,7 +69,8 @@ namespace FieldAgentWeb.Controllers
             }
             else
             {
-                throw new Exception(response.Message);
+                return BadRequest(response.Message);
+
             }
         }
 
@@ -88,7 +90,8 @@ namespace FieldAgentWeb.Controllers
             }
             else
             {
-                throw new Exception(response.Message);
+                return BadRequest(response.Message);
+
             }
         }
 
@@ -109,7 +112,8 @@ namespace FieldAgentWeb.Controllers
             }
             else
             {
-                throw new Exception(response.Message);
+                return BadRequest(response.Message);
+
             }
 
         }
@@ -130,7 +134,8 @@ namespace FieldAgentWeb.Controllers
             }
             else
             {
-                throw new Exception(response.Message);
+                return BadRequest(response.Message);
+
             }
         }
 
@@ -146,8 +151,10 @@ namespace FieldAgentWeb.Controllers
             }
             else
             {
-                throw new Exception(response.Message);
+                return BadRequest(response.Message);
+
             }
         }
+
     }
 }

@@ -40,7 +40,10 @@ namespace FieldAgent.Entities
             {
                 errors.Add(new ValidationResult("Start Date must be before projected End Date"));
             }
-
+            if(StartDate > ActualEndDate)
+            {
+                errors.Add(new ValidationResult("Start date must be before actual End Date"));
+            }
             
             return errors;
         }

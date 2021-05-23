@@ -1,5 +1,6 @@
 ﻿using FieldAgent.Entities;
 using FieldAgent.Interfaces;
+using FieldAgentWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,8 @@ namespace FieldAgentWeb.Controllers
             }
             else
             {
-                throw new Exception(response.Message);
+                return BadRequest(response.Message);
+
             }
         }
 
@@ -53,15 +55,15 @@ namespace FieldAgentWeb.Controllers
         {
             var response = reportRepo.GetPensionList(id);
 
-            if (response.Success)
+            try
             {
                 return View(response.Data);
             }
-            else
+            catch(Exception e)
             {
-                ModelState.AddModelError("Error", response.Message);
-                return RedirectToAction("Index");
+                return BadRequest(e.Message);
             }
+         
         }
 
         [Route("/report/securityaudit/{agencyId}/{clearanceId}")]
@@ -69,16 +71,14 @@ namespace FieldAgentWeb.Controllers
         {
             var response = reportRepo.AuditClearance(clearanceId, agencyId);
 
-            if (response.Success)
+            try
             {
                 return View(response.Data);
             }
-            else
+            catch (Exception e)
             {
-                ModelState.AddModelError("Error", response.Message);
-                return RedirectToAction("Index");
+                return BadRequest(e.Message);
             }
-        }
 
     }
 }
