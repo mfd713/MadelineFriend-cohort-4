@@ -114,7 +114,7 @@ namespace FieldAgentWeb.Controllers.APIs
         }
 
         [HttpPost, Authorize]
-        public IActionResult Create(Mission mission)
+        public IActionResult Create(Mission mission) //wrap with some validation
         {
             var response = missionRepo.Insert(mission);
 

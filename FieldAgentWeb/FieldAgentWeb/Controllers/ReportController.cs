@@ -59,11 +59,11 @@ namespace FieldAgentWeb.Controllers
             {
                 return View(response.Data);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-         
+
         }
 
         [Route("/report/securityaudit/{agencyId}/{clearanceId}")]
@@ -80,5 +80,6 @@ namespace FieldAgentWeb.Controllers
                 return BadRequest(e.Message);
             }
 
+        }
     }
 }
