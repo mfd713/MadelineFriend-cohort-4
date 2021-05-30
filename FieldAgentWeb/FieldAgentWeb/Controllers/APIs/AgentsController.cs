@@ -2,6 +2,7 @@
 using FieldAgent.Interfaces;
 using FieldAgentWeb.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,11 +23,26 @@ namespace FieldAgentWeb.Controllers.APIs
             this.agentRepository = agentRepository;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
         [Route("{id}", Name = "GetAgent")]
         public IActionResult GetAgent(int id)
         {
             var response = agentRepository.Get(id);
+
+            if (response.Success)
+            {
+                return Ok(response.Data);
+            }
+            else
+            {
+                return BadRequest(response.Message);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAllAgents()
+        {
+            var response = agentRepository.GetAll();
 
             if (response.Success)
             {

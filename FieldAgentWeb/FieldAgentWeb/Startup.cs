@@ -51,6 +51,10 @@ namespace FieldAgentWeb
             services.AddDbContext<FieldAgentsDbContext>(options
                 => options.UseSqlServer(Configuration.GetConnectionString("FieldAgent")));
 
+            services.AddCors(options => options.AddPolicy("corspolicy", (builder) =>
+            {
+                builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+            }));
 
             services.AddTransient<IAgencyRepository, AgencyEFRepo>();
             services.AddTransient<ISecurityClearanceRepository, SecurityClearanceEFRepo>();
@@ -77,8 +81,10 @@ namespace FieldAgentWeb
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseCors("corspolicy");
 
             app.UseAuthentication();
+
 
             app.UseAuthorization();
 
@@ -86,6 +92,8 @@ namespace FieldAgentWeb
             {
                 endpoints.MapControllers();
             });
+
+
         }
     }
 }

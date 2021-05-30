@@ -16,6 +16,20 @@ namespace FieldAgent.DAL
             this.context = context;
         }
 
+        public Response<List<Agent>> GetAll()
+        {
+            Response<List<Agent>> response = new Response<List<Agent>>();
+            response.Data = context.Agent.ToList();
+            response.Success = response.Data != null;
+            if (!response.Success)
+            {
+                response.Message += $"Agents list could not be retrieved";
+
+            }
+
+            return response;
+        }
+
         public Response Delete(int agentId)
         {
             Response response = new Response();

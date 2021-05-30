@@ -10,5 +10,6 @@ namespace FieldAgent.Interfaces
         Response Delete(int agentId);
         Response<Agent> Get(int agentId);
         Response<List<Mission>> GetMissions(int agentId);
+        Response<List<Agent>> GetAll();
     }
 }
