@@ -17,13 +17,30 @@ import {useState, useEffect} from 'react';
 
         return(
             <div className="container"> 
-                <h2>All Field Agents</h2>
+                <h1>All Field Agents</h1>
+                <br />
+                <div id="addBtnDiv">
+                    <button className="btn btn-primary" id="addButton">Add New Agent</button>
+                </div>
+                <hr />
                 <div className="row">
                     {agents.map(agent => 
-                        <div className="card mb-3">
+                        <div className="col-3">
+                        <div className="card">
+                            <div className="card-header"><img src="AgentsPhoto.png" width="40" height="40"/></div>
                             <div className="card-body">
-                                <p className="card-text">{agent.firstName} {agent.lastName}</p>
-                            </div>
+                                <p className="card-text">{agent.agentId}</p>
+                                <div id="expandCardText" className="card-text">
+                                    <div id="hiddenText">
+                                    <p className="card-text">{agent.firstName} {agent.lastName  }</p>
+
+                                        <a href="">Details/Edit</a>
+                                        <br />
+                                        <button id="deleteButton" className="btn btn-danger">Delete</button>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
                         </div>)}
                     
                 </div>

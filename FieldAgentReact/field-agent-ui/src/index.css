@@ -13,10 +13,26 @@ code {
 }
 
 .card {
-  max-width: 12rem;
+  max-width: 13rem;
   margin: 1em;
 }
 
-h2{
+.card:hover{
+  max-height: 18rem;
+}
+
+.card:hover:hover #hiddenText{
+  display: block;
+}
+
+h1, h2{
   text-align: left;
+}
+
+#addBtnDiv{
+  text-align: left;
+}
+
+#hiddenText{
+  display: none;
 }
