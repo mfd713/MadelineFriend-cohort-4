@@ -1,17 +1,28 @@
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import {useState} from 'react';
 
-function AddAgent(){
+function AddAgent(props){
+
+    const [newAgent, setNewAgent] = useState({firstName:"",lastName:"",dateOfBirth:"",height:0});
+
+    const handleSubmit = function(evt){
+        evt.preventDefault();
+        newAgent.firstName = evt.target[0].value;
+        newAgent.lastName =evt.target[1].value;
+        newAgent.dateOfBirth = evt.target[2].value +"T00:00:00";
+        newAgent.height = evt.target[3].value;
+        setNewAgent(newAgent);
+        props.onNewAgent(newAgent);
+        setNewAgent({});
+        
+    }
     return (
         <div className="container">
             <h2>Add An Agent</h2>
             <br></br>
             <div className="row">
-            <div className="col-6">
-                <img src="AgentsPhoto.png" width="80%"></img>
-            </div>
-            <div className="col-6">
-            <form>
+
+            <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label for="agentFirstName">First Name</label>
                     <input type="text" className="form-control" id="agentFirstName" name="agentFirstName"></input>
@@ -28,8 +39,9 @@ function AddAgent(){
                     <label for="height">Height (cm)</label>
                     <input type="number" className="form-control" id="height" name="height"></input>
                 </div>
+                    <button className="btn btn-primary" type="submit" id="addNewAgent">Add Agent</button>
             </form>
-            </div>
+
             </div>
             
         </div>
