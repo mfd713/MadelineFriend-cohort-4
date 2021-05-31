@@ -25,7 +25,7 @@ code {
   display: block;
 }
 
-h1, h2{
+h1{
   text-align: left;
 }
 
@@ -35,4 +35,9 @@ h1, h2{
 
 #hiddenText{
   display: none;
+}
+
+.form-group{
+  text-align: left;
+  margin-bottom: 1rem;
 }

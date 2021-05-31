@@ -1,11 +1,13 @@
 import './App.css';
 import React from 'react';
-import MainView from './MainView';
+import MainView from './Components/MainView';
+import Nav from './Components/Nav';
 
 function App() {
   return (
     <div className="App">
-<MainView></MainView>
+      <Nav></Nav>
+      <MainView></MainView>
     </div>
   );
 }
