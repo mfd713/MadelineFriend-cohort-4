@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {Switch, Route} from 'react-router-dom';
+import {Switch, Route, Redirect} from 'react-router-dom';
 import AddAgent from './AddAgent';
 import Home from './Home';
 import EditAgent from './EditAgent';
@@ -20,7 +20,7 @@ import EditAgent from './EditAgent';
             .catch(console.log);
         }, [agents]);
 
-        const bearerToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjI1MDM0NjcsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCJ9.nhvp31cQNb7RKDiYdo0NEr9eKk9j8ErJbZUl3eWT8Hc"
+        const bearerToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjI1MDY4NzEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MjAwMCJ9.NCJ0Xs6TShhqyLD5sTGcXnf8f-zwugfWqmsUr0NLYu8"
         const handleNewAgent = (agent) => {
             const init = {
                 method: "POST",
@@ -41,6 +41,7 @@ import EditAgent from './EditAgent';
                 })
                 .then(json => setAgents([...agents,json]))
                 .catch(console.log);
+
         }
 
         const handleEdit = (agent) =>{

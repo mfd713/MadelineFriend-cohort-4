@@ -3,10 +3,13 @@ import React from 'react';
 
 function Nav() {
     return(
+
         <nav className="navbar navbar-dark bg-dark">
-            <Link to="/">
+            <div className="container">
+                <Link to="/">
                 <a className="navbar-brand">Home</a>
             </Link>
+            </div> 
         </nav>
     )
 }

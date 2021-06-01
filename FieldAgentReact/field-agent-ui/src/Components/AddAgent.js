@@ -14,7 +14,8 @@ function AddAgent(props){
         setNewAgent(newAgent);
         props.onNewAgent(newAgent);
         setNewAgent({});
-        
+        console.log("addition successful");
+        return <Redirect to="/" />
     }
     return (
         <div className="container">
@@ -25,19 +26,19 @@ function AddAgent(props){
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label for="agentFirstName">First Name</label>
-                    <input type="text" className="form-control" id="agentFirstName" name="agentFirstName"></input>
+                    <input type="text" className="form-control" id="agentFirstName" name="agentFirstName" required maxLength="50"></input>
                 </div>
                 <div className="form-group">
                     <label for="agentLastName">Last Name</label>
-                    <input type="text" className="form-control" id="agentLastName" name="agentLastName"></input>
+                    <input type="text" className="form-control" id="agentLastName" name="agentLastName" required maxLength="50"></input>
                 </div>
                 <div className="form-group">
                     <label for="birthDate">Date of Birth</label>
-                    <input type="date" className="form-control" id="birthDate" name="birthDate"></input>
+                    <input type="date" className="form-control" id="birthDate" name="birthDate" required></input>
                 </div>
                 <div className="form-group">
                     <label for="height">Height (cm)</label>
-                    <input type="number" className="form-control" id="height" name="height"></input>
+                    <input type="number" className="form-control" id="height" name="height" required></input>
                 </div>
                     <button className="btn btn-primary" type="submit" id="addNewAgent">Add Agent</button>
             </form>

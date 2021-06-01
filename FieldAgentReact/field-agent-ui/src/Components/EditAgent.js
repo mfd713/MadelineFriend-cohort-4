@@ -17,6 +17,8 @@ function Edit(props) {
         toEdit.height = parseFloat(evt.target[3].value);
         setToEdit(toEdit);
         props.onEdit(toEdit);
+        setToEdit({});
+        console.log("edits successful");
     }
 
     return(
@@ -25,17 +27,17 @@ function Edit(props) {
             <br></br>
             <div className="row">
             <div className="col-6">
-                <img src="AgentsPhoto.png" width="80%"></img>
+                <img src="../AgentsPhoto.png" width="80%"></img>
             </div>
             <div className="col-6">
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label for="agentFirstName">First Name</label>
-                    <input type="text" className="form-control" id="agentFirstName" name="agentFirstName" defaultValue={toEdit.firstName}></input>
+                    <input type="text" className="form-control" id="agentFirstName" name="agentFirstName" defaultValue={toEdit.firstName} required maxLength="50"></input>
                 </div>
                 <div className="form-group">
                     <label for="agentLastName">Last Name</label>
-                    <input type="text" className="form-control" id="agentLastName" name="agentLastName" defaultValue={toEdit.lastName} ></input>
+                    <input type="text" className="form-control" id="agentLastName" name="agentLastName" defaultValue={toEdit.lastName} required maxLength="50"></input>
                 </div>
                 <div className="form-group">
                     <label for="birthDate">Date of Birth (currently {toEdit.dateOfBirth.substring(0,10)})</label>
@@ -43,7 +45,7 @@ function Edit(props) {
                 </div>
                 <div className="form-group">
                     <label for="height">Height (cm)</label>
-                    <input type="number" className="form-control" id="height" name="height" defaultValue={toEdit.height}></input>
+                    <input type="number" className="form-control" id="height" name="height" defaultValue={toEdit.height} required></input>
                 </div>
                     <button className="btn btn-primary" type="submit" id="saveChanges">Save Changes</button>
             </form>
